@@ -1,10 +1,10 @@
-Action Quake 2: The Next Generation
-Version 2.82 (May 14th, 2022)
+* Action Quake 2: The Next Generation
+* ls -lVersion 2.82 (May 14th, 2022)
 # Introduction
 
 ### Credits (pre-2010)
-http://www.aq2tng.barrysworld.net
-by Igor, JBravo, Slicer, Deathwatch, Freud, Elviz, Rektek
+* http://www.aq2tng.barrysworld.net
+* by Igor, JBravo, Slicer, Deathwatch, Freud, Elviz, Rektek
 
 The Next Generation started as three seperate projects: Action Quake 2: Edition, maintained by PG Bund and Igor, Action Quake 2: JBravo Edition, maintained by JBravo and Action Quake 2: Millennium, maintained by Slicer, Mort and Deathwatch.
 
@@ -13,10 +13,10 @@ All these projects had several things in common: They wanted to fix all bugs and
 This mod will have the features of all the mods it merged with and more!
 
 ### Credits
-https://aq2-tng.sourceforge.net
-https://www.github.com/aq2-tng/aq2-tng
-https://www.aq2world.com
-by hifi, Raptor007, Maniac-, darkshade9, QwazyWabbitWOS, stan0x, Reki, PaulKlumpp, DusteDdk, JBravo, mepetri
+* https://aq2-tng.sourceforge.net
+* https://www.github.com/aq2-tng/aq2-tng
+* https://www.aq2world.com
+* by hifi, Raptor007, Maniac-, darkshade9, QwazyWabbitWOS, stan0x, Reki, PaulKlumpp, DusteDdk, JBravo, mepetri
 
 This new generation of developers, server operators and most importantly, our players, keep the game alive and kicking.  They have continued in keeping the original theme of bringing bug fixes, features and a better playing experience.  Action Quake II is packaged on Steam as [AQtion](https://store.steampowered.com/app/1978800/AQtion/), along with the latest [Q2Pro](https://www.github.com/skullernet/q2pro) and [Q2Admin](https://github.com/actionquake/q2admin), it brings the latest developments in an easy-to-use package for players to enjoy.
 
