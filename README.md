@@ -1,5 +1,5 @@
 * Action Quake 2: The Next Generation
-* ls -lVersion 2.82 (May 14th, 2022)
+* Version 2.82 (May 14th, 2022)
 # Introduction
 
 ### Credits (pre-2010)
