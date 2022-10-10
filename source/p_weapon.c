@@ -2124,12 +2124,14 @@ void PlayWeaponSound(edict_t* ent)
 	case MZ_BLASTER:
 		#if USE_AQTION
 			if (cl_actionsounds->value) {
-				if (cl_mk23_sound->integer == 1)
+				if (cl_mk23_sound->value == 1)
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire1.wav"), 1, ATTN_LOUD, 0);
-				else if (cl_mk23_sound->integer == 2)
+				else if (cl_mk23_sound->value == 2)
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire2.wav"), 1, ATTN_LOUD, 0);
 				else
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire.wav"), 1, ATTN_LOUD, 0);
+			} else {
+				gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire.wav"), 1, ATTN_LOUD, 0);
 			}
 		#else
 			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire.wav"), 1, ATTN_LOUD, 0);
@@ -2139,12 +2141,14 @@ void PlayWeaponSound(edict_t* ent)
 	case MZ_MACHINEGUN:
 		#if USE_AQTION
 			if (cl_actionsounds->value) {
-				if (cl_mp5_sound->integer == 1)
+				if (cl_mp5_sound->value == 1)
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire1.wav"), 1, ATTN_LOUD, 0);
-				else if (cl_mp5_sound->integer == 2)
+				else if (cl_mp5_sound->value == 2)
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire2.wav"), 1, ATTN_LOUD, 0);
 				else
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire.wav"), 1, ATTN_LOUD, 0);
+			} else {
+				gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire.wav"), 1, ATTN_LOUD, 0);
 			}
 		#else
 			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire.wav"), 1, ATTN_LOUD, 0);
@@ -2154,12 +2158,14 @@ void PlayWeaponSound(edict_t* ent)
 	case MZ_ROCKET:
 		#if USE_AQTION
 			if (cl_actionsounds->value) {
-				if (cl_m4_sound->integer == 1)
+				if (cl_m4_sound->value == 1)
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire1.wav"), 1, ATTN_LOUD, 0);
-				else if (cl_m4_sound->integer == 2)
+				else if (cl_m4_sound->value == 2)
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire2.wav"), 1, ATTN_LOUD, 0);
 				else
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire.wav"), 1, ATTN_LOUD, 0);
+			} else {
+				gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire.wav"), 1, ATTN_LOUD, 0);
 			}
 		#else
 			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire.wav"), 1, ATTN_LOUD, 0);
@@ -2169,12 +2175,14 @@ void PlayWeaponSound(edict_t* ent)
 	case MZ_SHOTGUN:
 		#if USE_AQTION
 			if (cl_actionsounds->value) {
-				if (cl_m3_sound->integer == 1)
+				if (cl_m3_sound->value == 1)
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b1.wav"), 1, ATTN_LOUD, 0);
-				else if (cl_m3_sound->integer == 2)
+				else if (cl_m3_sound->value == 2)
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b2.wav"), 1, ATTN_LOUD, 0);
 				else
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b.wav"), 1, ATTN_LOUD, 0);
+			} else {
+				gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b.wav"), 1, ATTN_LOUD, 0);
 			}
 		#else
 			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b.wav"), 1, ATTN_LOUD, 0);
@@ -2184,19 +2192,27 @@ void PlayWeaponSound(edict_t* ent)
 	case MZ_SSHOTGUN:
 		#if USE_AQTION
 			if (cl_actionsounds->value) {
-				if (cl_m3_sound->integer == 1)
+				if (cl_hc_sound->value == 1) {
 					// Both barrels: sound on both WEAPON and ITEM to produce a louder boom.
-					if (!ent->client->pers.hc_mode)
+					if (!ent->client->pers.hc_mode) {
 						gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire1.wav"), 1, ATTN_NORM, 0);
+					}
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire1.wav"), 1, ATTN_LOUD, 0);
-				else if (cl_m3_sound->integer == 2)
-					if (!ent->client->pers.hc_mode)
+				} else if (cl_hc_sound->value == 2) {
+					if (!ent->client->pers.hc_mode) {
 						gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire2.wav"), 1, ATTN_NORM, 0);
+					}
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire2.wav"), 1, ATTN_LOUD, 0);
-				else
-					if (!ent->client->pers.hc_mode)
+				} else {
+					if (!ent->client->pers.hc_mode) {
 						gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_NORM, 0);
+					}
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_LOUD, 0);
+				}
+			} else {
+				if (!ent->client->pers.hc_mode)
+					gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_NORM, 0);
+				gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_LOUD, 0);
 			}
 		#else
 			if (!ent->client->pers.hc_mode)
@@ -2208,12 +2224,19 @@ void PlayWeaponSound(edict_t* ent)
 	case MZ_HYPERBLASTER:
 		#if USE_AQTION
 			if (cl_actionsounds->value) {
-				if (cl_ssg_sound->integer == 1)
+				if (cl_ssg_sound->value == 1) {
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire1.wav"), 1, ATTN_LOUD, 0);
-				else if (cl_ssg_sound->integer == 2)
+					gi.dprintf("Firing sound ssgfire1.wav\n");
+				} else if (cl_ssg_sound->value == 2) {
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire2.wav"), 1, ATTN_LOUD, 0);
-				else
+					gi.dprintf("Firing sound ssgfire2.wav\n");
+				} else {
 					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire.wav"), 1, ATTN_LOUD, 0);
+					gi.dprintf("Firing sound ssgfire.wav\n");
+				}
+			} else {
+				gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire.wav"), 1, ATTN_LOUD, 0);
+				gi.dprintf("Firing sound ssgfire (else)\n");
 			}
 		#else
 			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire.wav"), 1, ATTN_LOUD, 0);
@@ -2299,7 +2322,7 @@ void Pistol_Fire(edict_t* ent)
 
 	//      gi.cprintf(ent, PRINT_HIGH, "Spread is %d\n", spread);
 
-	if ((ent->client->mk23_rds == 1))
+	if (ent->client->mk23_rds == 1)
 	{
 		//Hard coded for reload only.
 		ent->client->ps.gunframe = 62;

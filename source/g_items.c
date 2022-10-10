@@ -1341,7 +1341,7 @@ world_model_flags int               copied to 'ent->s.effects' (see s.effects fo
    IT_WEAPON,
    NULL,
    0,
-   "weapons/mk23fire.wav weapons/mk23in.wav weapons/mk23out.wav weapons/mk23slap.wav weapons/mk23slide.wav misc/click.wav weapons/machgf4b.wav weapons/blastf1a.wav",
+   "weapons/mk23fire.wav weapons/mk23fire1.wav weapons/mk23fire2.wav weapons/mk23fire3.wav weapons/mk23in.wav weapons/mk23out.wav weapons/mk23slap.wav weapons/mk23slide.wav misc/click.wav weapons/machgf4b.wav weapons/blastf1a.wav",
   MK23_NUM}
   ,
 
@@ -1365,7 +1365,7 @@ world_model_flags int               copied to 'ent->s.effects' (see s.effects fo
    IT_WEAPON,
    NULL,
    0,
-   "weapons/mp5fire1.wav weapons/mp5in.wav weapons/mp5out.wav weapons/mp5slap.wav weapons/mp5slide.wav weapons/machgf1b.wav weapons/machgf2b.wav weapons/machgf3b.wav weapons/machgf5b.wav",
+   "weapons/mp5fire.wav weapons/mp5fire1.wav weapons/mp5fire2.wav weapons/mp5fire3.wav weapons/mp5in.wav weapons/mp5out.wav weapons/mp5slap.wav weapons/mp5slide.wav weapons/machgf1b.wav weapons/machgf2b.wav weapons/machgf3b.wav weapons/machgf5b.wav",
    MP5_NUM}
   ,
   {
@@ -1387,7 +1387,7 @@ world_model_flags int               copied to 'ent->s.effects' (see s.effects fo
    IT_WEAPON,
    NULL,
    0,
-   "weapons/m4a1fire.wav weapons/m4a1in.wav weapons/m4a1out.wav weapons/m4a1slide.wav weapons/rocklf1a.wav weapons/rocklr1b.wav",
+   "weapons/m4a1fire.wav weapons/m4a1fire1.wav weapons/m4a1fire2.wav weapons/m4a1in.wav weapons/m4a1out.wav weapons/m4a1slide.wav weapons/rocklf1a.wav weapons/rocklr1b.wav",
   M4_NUM}
   ,
   {
@@ -1409,7 +1409,7 @@ world_model_flags int               copied to 'ent->s.effects' (see s.effects fo
    IT_WEAPON,
    NULL,
    0,
-   "weapons/m3in.wav weapons/shotgr1b.wav weapons/shotgf1b.wav",
+   "weapons/m3in.wav weapons/shotgr1b.wav weapons/shotgf1b.wav weapons/shotgf1b1.wav weapons/shotgf1b2.wav",
   M3_NUM}
   ,
   {
@@ -1431,7 +1431,7 @@ world_model_flags int               copied to 'ent->s.effects' (see s.effects fo
    IT_WEAPON,
    NULL,
    0,
-   "weapons/cannon_fire.wav weapons/sshotf1b.wav weapons/cclose.wav weapons/cin.wav weapons/cout.wav weapons/copen.wav",
+   "weapons/cannon_fire.wav weapons/cannon_fire1.wav weapons/cannon_fire2.wav weapons/sshotf1b.wav weapons/cclose.wav weapons/cin.wav weapons/cout.wav weapons/copen.wav",
   HC_NUM}
   ,
   {
@@ -1453,7 +1453,7 @@ world_model_flags int               copied to 'ent->s.effects' (see s.effects fo
    IT_WEAPON,
    NULL,
    0,
-   "weapons/ssgbolt.wav weapons/ssgfire.wav weapons/ssgin.wav misc/lensflik.wav weapons/hyprbl1a.wav weapons/hyprbf1a.wav",
+   "weapons/ssgbolt.wav weapons/ssgfire.wav weapons/ssgfire1.wav weapons/ssgfire2.wav weapons/ssgin.wav misc/lensflik.wav weapons/hyprbl1a.wav weapons/hyprbf1a.wav",
   SNIPER_NUM}
   ,
   {
