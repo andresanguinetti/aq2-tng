@@ -494,11 +494,21 @@ cvar_t *sv_idleremove;
 cvar_t *g_spawn_items;
 
 // Discord SDK integration with Q2Pro
+#if USE_AQTION
 cvar_t *cl_discord;
 cvar_t *cl_discord_id;
 cvar_t *cl_discord_discriminator;
 cvar_t *cl_discord_username;
 cvar_t *cl_discord_avatar;
+// End Discord
+cvar_t  *cl_actionsounds;
+cvar_t  *cl_mk23_sound;
+cvar_t  *cl_mp5_sound;
+cvar_t  *cl_m4_sound;
+cvar_t  *cl_m3_sound;
+cvar_t  *cl_hc_sound;
+cvar_t  *cl_ssg_sound;
+#endif
 
 void SpawnEntities (char *mapname, char *entities, char *spawnpoint);
 void ClientThink (edict_t * ent, usercmd_t * cmd);

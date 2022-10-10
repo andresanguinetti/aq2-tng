@@ -486,8 +486,7 @@ IRC_poll (void)
 // %v -> vote item
 // %k -> kills/frags/rounds
 // %s -> normal string
-void
-IRC_printf (int type, char *fmt, ... )
+void IRC_printf (int type, char *fmt, ... )
 {
   char    outbuf[IRC_BUFLEN];
   char    message[IRC_BUFLEN-128];

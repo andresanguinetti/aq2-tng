@@ -2122,30 +2122,102 @@ void PlayWeaponSound(edict_t* ent)
 	else switch (ent->client->weapon_sound)
 	{
 	case MZ_BLASTER:
-		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire.wav"), 1, ATTN_LOUD, 0);
+		#if USE_AQTION
+			if (cl_actionsounds->value) {
+				if (cl_mk23_sound->integer == 1)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire1.wav"), 1, ATTN_LOUD, 0);
+				else if (cl_mk23_sound->integer == 2)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire2.wav"), 1, ATTN_LOUD, 0);
+				else
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire.wav"), 1, ATTN_LOUD, 0);
+			}
+		#else
+			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mk23fire.wav"), 1, ATTN_LOUD, 0);
+		#endif
 		MuzzleFlash(ent, MZ_MACHINEGUN);
 		break;
 	case MZ_MACHINEGUN:
-		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire1.wav"), 1, ATTN_LOUD, 0);
+		#if USE_AQTION
+			if (cl_actionsounds->value) {
+				if (cl_mp5_sound->integer == 1)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire1.wav"), 1, ATTN_LOUD, 0);
+				else if (cl_mp5_sound->integer == 2)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire2.wav"), 1, ATTN_LOUD, 0);
+				else
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire.wav"), 1, ATTN_LOUD, 0);
+			}
+		#else
+			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/mp5fire.wav"), 1, ATTN_LOUD, 0);
+		#endif
 		MuzzleFlash(ent, MZ_MACHINEGUN);
 		break;
 	case MZ_ROCKET:
-		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire.wav"), 1, ATTN_LOUD, 0);
+		#if USE_AQTION
+			if (cl_actionsounds->value) {
+				if (cl_m4_sound->integer == 1)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire1.wav"), 1, ATTN_LOUD, 0);
+				else if (cl_m4_sound->integer == 2)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire2.wav"), 1, ATTN_LOUD, 0);
+				else
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire.wav"), 1, ATTN_LOUD, 0);
+			}
+		#else
+			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/m4a1fire.wav"), 1, ATTN_LOUD, 0);
+		#endif
 		MuzzleFlash(ent, MZ_MACHINEGUN);
 		break;
 	case MZ_SHOTGUN:
-		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b.wav"), 1, ATTN_LOUD, 0);
-		MuzzleFlash(ent, MZ_SHOTGUN);
+		#if USE_AQTION
+			if (cl_actionsounds->value) {
+				if (cl_m3_sound->integer == 1)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b1.wav"), 1, ATTN_LOUD, 0);
+				else if (cl_m3_sound->integer == 2)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b2.wav"), 1, ATTN_LOUD, 0);
+				else
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b.wav"), 1, ATTN_LOUD, 0);
+			}
+		#else
+			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/shotgf1b.wav"), 1, ATTN_LOUD, 0);
+		#endif
+		MuzzleFlash(ent, MZ_MACHINEGUN);
 		break;
 	case MZ_SSHOTGUN:
-		if (!ent->client->pers.hc_mode)
-			// Both barrels: sound on both WEAPON and ITEM to produce a louder boom.
-			gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_NORM, 0);
-		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_LOUD, 0);
-		MuzzleFlash(ent, MZ_SSHOTGUN);
+		#if USE_AQTION
+			if (cl_actionsounds->value) {
+				if (cl_m3_sound->integer == 1)
+					// Both barrels: sound on both WEAPON and ITEM to produce a louder boom.
+					if (!ent->client->pers.hc_mode)
+						gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire1.wav"), 1, ATTN_NORM, 0);
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire1.wav"), 1, ATTN_LOUD, 0);
+				else if (cl_m3_sound->integer == 2)
+					if (!ent->client->pers.hc_mode)
+						gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire2.wav"), 1, ATTN_NORM, 0);
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire2.wav"), 1, ATTN_LOUD, 0);
+				else
+					if (!ent->client->pers.hc_mode)
+						gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_NORM, 0);
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_LOUD, 0);
+			}
+		#else
+			if (!ent->client->pers.hc_mode)
+				gi.sound(ent, CHAN_ITEM, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_NORM, 0);
+			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/cannon_fire.wav"), 1, ATTN_LOUD, 0);
+		#endif
+		MuzzleFlash(ent, MZ_MACHINEGUN);
 		break;
 	case MZ_HYPERBLASTER:
-		gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire.wav"), 1, ATTN_LOUD, 0);
+		#if USE_AQTION
+			if (cl_actionsounds->value) {
+				if (cl_ssg_sound->integer == 1)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire1.wav"), 1, ATTN_LOUD, 0);
+				else if (cl_ssg_sound->integer == 2)
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire2.wav"), 1, ATTN_LOUD, 0);
+				else
+					gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire.wav"), 1, ATTN_LOUD, 0);
+			}
+		#else
+			gi.sound(ent, CHAN_WEAPON, gi.soundindex("weapons/ssgfire.wav"), 1, ATTN_LOUD, 0);
+		#endif
 		MuzzleFlash(ent, MZ_MACHINEGUN);
 		break;
 	default:

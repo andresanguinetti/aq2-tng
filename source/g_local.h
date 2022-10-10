@@ -1208,11 +1208,21 @@ extern cvar_t *gmf; // Gamemodeflags
 extern cvar_t *sv_idleremove; // Remove idlers
 
 // Discord SDK integration with Q2Pro
+#if USE_AQTION
 extern cvar_t *cl_discord;
 extern cvar_t *cl_discord_id;
 extern cvar_t *cl_discord_discriminator;
 extern cvar_t *cl_discord_username;
 extern cvar_t *cl_discord_avatar;
+
+extern cvar_t *cl_actionsounds;
+extern cvar_t *cl_mk23_sound;
+extern cvar_t *cl_mp5_sound;
+extern cvar_t *cl_m4_sound;
+extern cvar_t *cl_m3_sound;
+extern cvar_t *cl_hc_sound;
+extern cvar_t *cl_ssg_sound;
+#endif
 
 #define world   (&g_edicts[0])
 

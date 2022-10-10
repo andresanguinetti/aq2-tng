@@ -569,12 +569,23 @@ void InitGame( void )
 	sv_idleremove = gi.cvar("sv_idleremove", "0", 0);
   	g_spawn_items = gi.cvar( "g_spawn_items", "0", CVAR_LATCH);
 
+	#if USE_AQTION
 	// Discord SDK integration with Q2Pro
 	cl_discord = gi.cvar("cl_discord", "0", 0);
 	cl_discord_id = gi.cvar("cl_discord_id", "0", 0);
 	cl_discord_discriminator = gi.cvar("cl_discord_discriminator", "0", 0);
 	cl_discord_username = gi.cvar("cl_discord_username", "", 0);
 	cl_discord_avatar = gi.cvar("cl_discord_avatar", "0", 0);
+	// End Discord
+	
+	cl_actionsounds = gi.cvar("cl_actionsounds", "0", 0);
+	cl_mk23_sound = gi.cvar("cl_mk23_sound", "0", 0);
+	cl_mp5_sound = gi.cvar("cl_mp5_sound", "0", 0);
+	cl_m4_sound = gi.cvar("cl_m4_sound", "0", 0);
+	cl_m3_sound = gi.cvar("cl_m3_sound", "0", 0);
+	cl_hc_sound = gi.cvar("cl_hc_sound", "0", 0);
+	cl_ssg_sound = gi.cvar("cl_ssg_sound", "0", 0);
+	#endif
 
 #ifndef NO_BOTS
 	// bots
