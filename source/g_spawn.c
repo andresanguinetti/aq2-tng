@@ -889,6 +889,7 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 	{
 	gi.cvar_forceset(gm->name, "jump");
 	gi.cvar_forceset(stat_logs->name, "0"); // Turn off stat logs for jump mode
+	gameSettings |= GS_JUMP;
 		if (teamplay->value)
 		{
 			gi.dprintf ("Jump Enabled - Forcing teamplay ff\n");

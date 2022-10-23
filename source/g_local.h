@@ -1884,6 +1884,9 @@ struct gclient_s
 
 	// visiblity mask
 	unsigned int dimension_observe;
+
+	// From PatMaN's JMOD
+	int			shootable;
 };
 
 
@@ -2260,6 +2263,7 @@ extern team_t teams[TEAM_TOP];
 #define GS_MATCHMODE	4
 #define GS_ROUNDBASED	8
 #define GS_WEAPONCHOOSE 16
+#define GS_JUMP			32
 
 extern int gameSettings;
 

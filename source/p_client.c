@@ -2440,6 +2440,8 @@ void PutClientInServer(edict_t * ent)
 	client->grenade_max = 2;
 	client->desired_fov = 90;
 
+	// From PatMaN's JMOD, default is that everyone is shootable
+	client->shootable = 1;
 
 	// clear entity values
 	ent->groundentity = NULL;

@@ -199,7 +199,12 @@ static void fire_lead (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 		{
 			if (tr.ent->takedamage)
 			{
-				T_Damage(tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, DAMAGE_BULLET, mod);
+				// From PatMaN's JMOD
+				if (!tr.ent->client->shootable) {
+					return;
+				} else {
+					T_Damage(tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, DAMAGE_BULLET, mod);
+				}
 			}
 			else
 			{
@@ -837,6 +842,9 @@ void kick_attack (edict_t *ent)
 		{
 			if (tr.ent->client->uvTime)
 				return;
+			// From PatMaN's JMOD
+			if (!tr.ent->client->shootable)
+				return;
 			
 			if (tr.ent != ent && ent->client && OnSameTeam( tr.ent, ent ))
 				friendlyFire = 1;
@@ -908,6 +916,9 @@ void punch_attack(edict_t * ent)
 			if (tr.ent->client)
 			{
 				if (tr.ent->client->uvTime)
+					return;
+				// From PatMaN's JMOD
+				if (!tr.ent->client->shootable)
 					return;
 
 				if (tr.ent != ent && ent->client && OnSameTeam(tr.ent, ent))

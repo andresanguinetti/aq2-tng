@@ -219,3 +219,15 @@ void Cmd_Recall_f (edict_t *ent)
 
 	ent->movetype = MOVETYPE_WALK;
 }
+
+void Cmd_Shootable_f(edict_t * ent)
+{
+	// Only allow this to be set if current session is in jump mode
+	if (gameSettings & GS_JUMP) {
+		ent->client->shootable = 0;
+		return;
+	} else {
+		gi.centerprintf(ent, "Jump Mode is not enabled");
+		return;
+	}
+}
