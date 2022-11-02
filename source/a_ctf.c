@@ -934,6 +934,7 @@ void CTFCalcScores(void)
 	#if USE_AQTION
 	// Needed to add this here because this is called separately from TallyEndOfLevelTeamScores (teamplay)
 		if (stat_logs->value) {
+			GetGhostStats(); // Collect all ghost stats
 			LogMatch();  // Generates end of match logs
 			LogEndMatchStats();  // Generates end of match stats
 		}
