@@ -1233,7 +1233,7 @@ void Cmd_Ghost_f(edict_t * ent)
 void GetGhostStats(void)
 {
 	int i = 0;
-	edict_t * ent;
+	edict_t *ent;
 	gghost_t *ghost = NULL;
 
 	if (!use_ghosts->value) {
