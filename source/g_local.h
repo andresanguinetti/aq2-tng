@@ -2144,6 +2144,7 @@ extern gghost_t ghost_players[MAX_GHOSTS];
 extern int num_ghost_players;
 
 void CreateGhost (edict_t * ent);
+void GetGhostStats(void);
 
 //zucc
 void LaserSightThink (edict_t * self);
