@@ -611,6 +611,8 @@ Features
 * Misc. client options
   cl_bandagesound [0/1] - client cvar, plays misc/bandage.wav sound when bandaging, set to 0 for classic mode (default "1")
   cl_discord [0/1] - client cvar, 1 enables Discord integration, 0 disables (default "1")
+
+  
 --------------------------------------------------------------------------------------------------------------------
 Contact Information
   If you wish to contact the TNG team, to report a bug, suggest a new feature, or offer JBravo your
