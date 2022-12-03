@@ -290,6 +290,7 @@
 #include	"tng_jump.h"
 #include	"g_grapple.h"
 #include	"p_antilag.h"
+#include	"tng_discord.h"
 
 #ifndef NO_BOTS
 #include	"acesrc/botnav.h"
@@ -1213,6 +1214,10 @@ extern cvar_t *cl_discord_id;
 extern cvar_t *cl_discord_discriminator;
 extern cvar_t *cl_discord_username;
 extern cvar_t *cl_discord_avatar;
+
+// Discord chat integration
+extern cvar_t *sv_webhook_discord;
+extern cvar_t *sv_webhook_discord_url;
 
 #define world   (&g_edicts[0])
 

@@ -1469,8 +1469,12 @@ void Cmd_Say_f (edict_t * ent, qboolean team, qboolean arg0, qboolean partner_ms
 		gi.cprintf (NULL, PRINT_CHAT, "%s", text);
 		if ((!team) && (!partner_msg)) {
 			IRC_printf (IRC_T_TALK, "%s", text);
+			text[strcspn(text, "\n")] = 0;
+			HTTP_Discord_Webhook(text);
 		}
 	}
+
+	Q_strncatz(text, "\n", sizeof(text));
 	
 	for (j = 1; j <= game.maxclients; j++)
 	{
