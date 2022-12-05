@@ -121,14 +121,14 @@ int HTTP_Discord_Webhook(const char *payload, ...)
             curl_multi_add_handle(multi_handle, curl);
             CURLMcode mc = curl_multi_perform(multi_handle, &result);
 
-            if(still_running)
+            if(result)
             /* wait for activity, timeout or "nothing" */
             mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
 
             curl_multi_remove_handle(multi_handle, curl);
             if(mc)
                 break;
-            } while(still_running);
+            } while(result);
 
         curl_multi_cleanup(multi_handle);
         curl_easy_cleanup(curl);
