@@ -107,7 +107,6 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
 
-        curl_multi_add_handle(multi_handle, curl);
 
         // !!!
         // Debug area //
@@ -117,19 +116,20 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         // ...and uncomment this line for full debug mode
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         // End Debug //
-
-        curl_multi_perform(multi_handle, &result);
         
-        // do {
-        //     CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
+        do {
+            curl_multi_add_handle(multi_handle, curl);
+            CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
 
-        //     if(still_running)
-        //     /* wait for activity, timeout or "nothing" */
-        //     mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
+            if(still_running)
+            /* wait for activity, timeout or "nothing" */
+            mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
 
-        //     if(mc)
-        //         break;
-        //     } while(still_running);
+            curl_multi_remove_handle(multi_handle, curl);
+            if(mc)
+                break;
+            } while(still_running);
+
         curl_multi_cleanup(multi_handle);
         curl_easy_cleanup(curl);
         curl_slist_free_all(headers);
