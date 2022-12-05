@@ -57,7 +57,7 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 }
 int HTTP_Discord_Webhook(const char *payload, ...)
 {
-    int result;
+    int result = 1;
 	va_list argptr;
 	char text[151];
     char jsonmsg[151];
@@ -84,11 +84,6 @@ int HTTP_Discord_Webhook(const char *payload, ...)
     // Format JSON payload
     text[strcspn(text, "\n")] = 0;
     Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", dhost, text);
-
-    //debug
-    gi.dprintf("Text is %s\n", text);
-    gi.dprintf("Payload is %s\n", jsonmsg);
-    //debug end
 
     if(curl && multi_handle) {
         struct curl_slist *headers = NULL;
@@ -125,7 +120,6 @@ int HTTP_Discord_Webhook(const char *payload, ...)
             /* wait for activity, timeout or "nothing" */
             mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
 
-            
             if(mc)
                 break;
             }
