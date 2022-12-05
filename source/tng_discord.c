@@ -57,15 +57,9 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 }
 int HTTP_Discord_Webhook(const char *payload, ...)
 {
-<<<<<<< HEAD
-    int still_running = 0;
-    va_list argptr;
-    char text[151];
-=======
     int result;
 	va_list argptr;
 	char text[151];
->>>>>>> 80a81d0f916037dc49e4147f3584a6a2467bab29
     char jsonmsg[151];
     char webhook_url[512];
     char dhost[128];
@@ -89,11 +83,7 @@ int HTTP_Discord_Webhook(const char *payload, ...)
 
     // Format JSON payload
     text[strcspn(text, "\n")] = 0;
-<<<<<<< HEAD
     Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", dhost, text);
-=======
-    Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"**%s** ```%s```\"}", dhost, text);
->>>>>>> 80a81d0f916037dc49e4147f3584a6a2467bab29
 
     if(curl && multi_handle) {
         struct curl_slist *headers = NULL;
@@ -109,34 +99,40 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonmsg);
         curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
+        curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
 
         curl_multi_add_handle(multi_handle, curl);
 
-        // Debug area
-
+        // !!!
+        // Debug area //
         // Do not print responses from curl request
         // Comment this line...
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+        //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
         // ...and uncomment this line for full debug mode
-        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        // End Debug //
 
-        // End Debug
-
+        curl_multi_perform(curl, &result);
         
-        do {
-            CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
+        // do {
+        //     CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
 
-            if(still_running)
-            /* wait for activity, timeout or "nothing" */
-            mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
+        //     if(still_running)
+        //     /* wait for activity, timeout or "nothing" */
+        //     mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
 
-            if(mc)
-                break;
-            } while(still_running);
-        curl_multi_cleanup(multi_handle);
-        curl_easy_cleanup(curl);
-        curl_slist_free_all(headers);
+        //     if(mc)
+        //         break;
+        //     } while(still_running);
+        
     }
     return (int) result;
+}
+
+void curl_cleanup()
+{
+    curl_multi_cleanup(multi_handle);
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
 }
