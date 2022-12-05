@@ -1472,8 +1472,6 @@ void Cmd_Say_f (edict_t * ent, qboolean team, qboolean arg0, qboolean partner_ms
 			HTTP_Discord_Webhook(text);
 		}
 	}
-
-	Q_strncatz(text, "\n", sizeof(text));
 	
 	for (j = 1; j <= game.maxclients; j++)
 	{

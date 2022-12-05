@@ -57,9 +57,15 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 }
 int HTTP_Discord_Webhook(const char *payload, ...)
 {
+<<<<<<< HEAD
     int still_running = 0;
     va_list argptr;
     char text[151];
+=======
+    int result;
+	va_list argptr;
+	char text[151];
+>>>>>>> 80a81d0f916037dc49e4147f3584a6a2467bab29
     char jsonmsg[151];
     char webhook_url[512];
     char dhost[128];
@@ -83,7 +89,11 @@ int HTTP_Discord_Webhook(const char *payload, ...)
 
     // Format JSON payload
     text[strcspn(text, "\n")] = 0;
+<<<<<<< HEAD
     Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", dhost, text);
+=======
+    Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"**%s** ```%s```\"}", dhost, text);
+>>>>>>> 80a81d0f916037dc49e4147f3584a6a2467bab29
 
     if(curl && multi_handle) {
         struct curl_slist *headers = NULL;
@@ -128,5 +138,5 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         curl_easy_cleanup(curl);
         curl_slist_free_all(headers);
     }
-    return 0;
+    return (int) result;
 }
