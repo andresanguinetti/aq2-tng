@@ -836,13 +836,13 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 				self->client->pers.netname, special_message, self->client->attacker->client->pers.netname);
 			PrintDeathMessage(death_msg, self);
 			IRC_printf(IRC_T_KILL, death_msg);
-			HTTP_Discord_Webhook(death_msg);
 			AddKilledPlayer(self->client->attacker, self);
 
 			#if USE_AQTION
 			if (stat_logs->value) { // Only create stats logs if stat_logs is 1
 				LogKill(self, inflictor, self->client->attacker);
 			}
+			HTTP_Discord_Webhook(death_msg);
 			#endif
 
 			self->client->attacker->client->radio_num_kills++;
@@ -869,7 +869,6 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 			sprintf( death_msg, "%s %s\n", self->client->pers.netname, message );
 			PrintDeathMessage(death_msg, self );
 			IRC_printf( IRC_T_DEATH, death_msg );
-			HTTP_Discord_Webhook(death_msg);
 
 			if (!teamplay->value || team_round_going || !ff_afterround->value)  {
 				Subtract_Frag( self );
@@ -882,6 +881,7 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 			if (stat_logs->value) { // Only create stats logs if stat_logs is 1
 				LogWorldKill(self);
 			}
+			HTTP_Discord_Webhook(death_msg);
 			#endif
 		}
 		return;
@@ -1217,13 +1217,13 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 			message, attacker->client->pers.netname, message2);
 			PrintDeathMessage(death_msg, self);
 			IRC_printf(IRC_T_KILL, death_msg);
-			HTTP_Discord_Webhook(death_msg);
 			AddKilledPlayer(attacker, self);
 
 			#if USE_AQTION
 			if (stat_logs->value) {
 				LogKill(self, inflictor, attacker);
 			}
+			HTTP_Discord_Webhook(death_msg);
 			#endif
 
 			if (friendlyFire) {
@@ -1249,12 +1249,12 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 	sprintf(death_msg, "%s died\n", self->client->pers.netname);
 	PrintDeathMessage(death_msg, self);
 	IRC_printf(IRC_T_DEATH, death_msg);
-	HTTP_Discord_Webhook(death_msg);
 
 	#if USE_AQTION
 	if (stat_logs->value) { // Only create stats logs if stat_logs is 1
 		LogWorldKill(self);
 	}
+	HTTP_Discord_Webhook(death_msg);
 	#endif
 
 	Subtract_Frag(self);	//self->client->resp.score--;

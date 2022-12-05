@@ -58,17 +58,18 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 int HTTP_Discord_Webhook(const char *payload, ...)
 {
     int still_running = 0;
-	va_list argptr;
-	char text[151];
+    va_list argptr;
+    char text[151];
     char jsonmsg[151];
     char webhook_url[512];
     char dhost[128];
+    long responseCode;
 
     strcpy(webhook_url, sv_webhook_discord_url->string);
     strcpy(dhost, hostname->string);
 
 	// If sv_webhook_discord is disabled
-	if (!sv_webhook_discord->value || webhook_url == "disabled") {
+	if (!sv_webhook_discord->value || strcmp(webhook_url,"disabled") == 0) {
 		return 0;
 	}
 
@@ -80,35 +81,49 @@ int HTTP_Discord_Webhook(const char *payload, ...)
     CURLM *multi_handle;
     multi_handle = curl_multi_init();
 
-    // Format JSON payload 
-    Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"**%s** ```%s```\"}", dhost, text);
+    // Format JSON payload
+    text[strcspn(text, "\n")] = 0;
+    Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", dhost, text);
 
     if(curl && multi_handle) {
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Expect:");
         headers = curl_slist_append(headers, "Content-Type: application/json");
 
+        // Retain DNS info so we don't waste time doing lookups constantly
+        curl_easy_setopt(curl, CURLOPT_DNS_CACHE_TIMEOUT, 2L);
+        //
+
         curl_easy_setopt(curl, CURLOPT_URL, webhook_url);
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonmsg);
-        // Do not print responses from curl request
-        // Comment below if you are debugging responses
-        // Hint: Forbidden would mean your stat_url is malformed,
-        // and a key error indicates your api key is bad or expired
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+        curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
 
         curl_multi_add_handle(multi_handle, curl);
+
+        // Debug area
+
+        // Do not print responses from curl request
+        // Comment this line...
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+        // ...and uncomment this line for full debug mode
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+
+        // End Debug
+
         
         do {
             CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
-        if(still_running)
-        /* wait for activity, timeout or "nothing" */
-        mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
 
-        if(mc)
-            break;
-        } while(still_running);
+            if(still_running)
+            /* wait for activity, timeout or "nothing" */
+            mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
+
+            if(mc)
+                break;
+            } while(still_running);
         curl_multi_cleanup(multi_handle);
         curl_easy_cleanup(curl);
         curl_slist_free_all(headers);
