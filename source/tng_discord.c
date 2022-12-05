@@ -80,7 +80,8 @@ int HTTP_Discord_Webhook(const char *payload, ...)
     CURLM *multi_handle;
     multi_handle = curl_multi_init();
 
-    // Format JSON payload 
+    // Format JSON payload
+    text[strcspn(text, "\n")] = 0;
     Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"**%s** ```%s```\"}", dhost, text);
 
     if(curl && multi_handle) {
