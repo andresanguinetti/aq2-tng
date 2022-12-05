@@ -85,6 +85,11 @@ int HTTP_Discord_Webhook(const char *payload, ...)
     text[strcspn(text, "\n")] = 0;
     Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", dhost, text);
 
+    //debug
+    gi.dprintf("Text is %s\n", text);
+    gi.dprintf("Payload is %s\n", jsonmsg);
+    //debug end
+
     if(curl && multi_handle) {
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Expect:");
