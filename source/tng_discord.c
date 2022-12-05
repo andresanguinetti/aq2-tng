@@ -127,6 +127,5 @@ int HTTP_Discord_Webhook(const char *payload, ...)
     curl_multi_remove_handle(multi_handle, curl);
     curl_multi_cleanup(multi_handle);
     curl_easy_cleanup(curl);
-    curl_slist_free_all(headers);
     return (int) result;
 }
