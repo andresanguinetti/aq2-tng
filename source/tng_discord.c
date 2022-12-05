@@ -57,7 +57,6 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 }
 int HTTP_Discord_Webhook(const char *payload, ...)
 {
-    int still_running = 1;
 	va_list argptr;
 	char text[151];
     char jsonmsg[151];
@@ -102,7 +101,6 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
 
-
         // !!!
         // Debug area //
         // Do not print responses from curl request
@@ -113,21 +111,10 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         // End Debug //
     }
     
-    if(still_running) {
-        curl_multi_add_handle(multi_handle, curl);
-        CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
-
-        if(still_running)
-        /* wait for activity, timeout or "nothing" */
-        mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
-
-        if(mc)
-            still_running = 0;
-    } else {
-        still_running = 0;
-        curl_multi_remove_handle(multi_handle, curl);
-        curl_multi_cleanup(multi_handle);
-        curl_easy_cleanup(curl);
-        return (int) still_running;
-    }
+    curl_multi_add_handle(multi_handle, curl);
+    CURLMcode mc = curl_multi_perform(multi_handle, 1);
+    curl_multi_remove_handle(multi_handle, curl);
+    curl_multi_cleanup(multi_handle);
+    curl_easy_cleanup(curl);
+    return 0;
 }
