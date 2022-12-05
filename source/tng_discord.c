@@ -57,6 +57,7 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 }
 int HTTP_Discord_Webhook(const char *payload, ...)
 {
+    int handles = 1;
 	va_list argptr;
 	char text[151];
     char jsonmsg[151];
@@ -112,7 +113,7 @@ int HTTP_Discord_Webhook(const char *payload, ...)
     }
     
     curl_multi_add_handle(multi_handle, curl);
-    CURLMcode mc = curl_multi_perform(multi_handle, 1);
+    CURLMcode mc = curl_multi_perform(multi_handle, &handles);
     curl_multi_remove_handle(multi_handle, curl);
     curl_multi_cleanup(multi_handle);
     curl_easy_cleanup(curl);
