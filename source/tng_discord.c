@@ -119,6 +119,10 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         // End Debug //
 
         curl_multi_perform(multi_handle, &result);
+
+        while(result) {
+            curl_multi_perform(multi_handle, &result);
+        }
         
         // do {
         //     CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
