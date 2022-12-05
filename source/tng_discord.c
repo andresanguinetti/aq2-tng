@@ -119,7 +119,7 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         
         do {
             curl_multi_add_handle(multi_handle, curl);
-            CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
+            CURLMcode mc = curl_multi_perform(multi_handle, &result);
 
             if(still_running)
             /* wait for activity, timeout or "nothing" */
