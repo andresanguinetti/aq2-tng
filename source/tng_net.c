@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 //
-// sv_discord.c - Discord webhook integration for chat relay
+// tng_net.c - Discord webhook integration for chat relay
 //
 
 #include "g_local.h"
@@ -31,7 +31,7 @@ HTTP_Init
 Init libcurl and multi handle.
 ===============
 */
-void Discord_HTTP_Init(void)
+void cURL_Init(void)
 {
     if (curl_global_init(CURL_GLOBAL_NOTHING)) {
             Com_Printf("curl_global_init failed\n");
@@ -42,7 +42,7 @@ void Discord_HTTP_Init(void)
         Com_Printf("%s initialized.\n", curl_version());
     }
 
-void Discord_HTTP_Shutdown(void)
+void cURL_Shutdown(void)
 {
     if (!curl_initialized)
         return;
@@ -55,35 +55,54 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 {
    return size * nmemb;
 }
-int HTTP_Discord_Webhook(const char *payload, ...)
+int cURL_Easy_Send(int payloadType, const char *payload, ...)
 {
     int handles = 1;
 	va_list argptr;
 	char text[151];
-    char jsonmsg[151];
-    char webhook_url[512];
-    char dhost[128];
-    long responseCode;
+    char jsonmsg[1024];
+    char url[512];
+    char dhost[64];
 
-    strcpy(webhook_url, sv_webhook_discord_url->string);
-    strcpy(dhost, hostname->string);
-
-	// If sv_webhook_discord is disabled
-	if (!sv_webhook_discord->value || strcmp(webhook_url,"disabled") == 0) {
+    /// Sanity checks before we do anything
+    // If sv_curl_enable is disabled, take a hike
+	if (!sv_curl_enable->value){
 		return 0;
 	}
 
-	va_start (argptr, payload);
-	vsnprintf (text, sizeof(text), payload, argptr);
-	va_end (argptr);
+    // Check if calling to status API is disabled
+    if (strcmp(url,"disabled") == 0) {
+        return 0;
+    }
+
+    /// So far so good, time to go to work
+    // Get a string representation of these cvars
+    strcpy(url, sv_curl_status_api_url->string);
+
+    if (payloadType == CURL_STATUS_API) {
+        Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"status\": \"(%s) - %s\"}", dhost, text);
+    } else if (payloadType == CURL_DISCORD_CHAT) {
+        // Scraping that beautiful data payload
+        va_start (argptr, payload);
+        vsnprintf (text, sizeof(text), payload, argptr);
+        va_end (argptr);
+
+        strcpy(dhost, hostname->string);
+        text[strcspn(text, "\n")] = 0;
+
+        Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", dhost, text);
+    } else {
+        // Invalid payloadType supplied, do nothing
+        gi.dprintf("cURL_Easy_Send error: invalid payloadType %i", payloadType);
+        return 0;
+    }
 
 	CURL *curl = curl_easy_init();
     CURLM *multi_handle;
     multi_handle = curl_multi_init();
 
     // Format JSON payload
-    text[strcspn(text, "\n")] = 0;
-    Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", dhost, text);
+    
 
     if(curl && multi_handle) {
         struct curl_slist *headers = NULL;
@@ -100,7 +119,6 @@ int HTTP_Discord_Webhook(const char *payload, ...)
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonmsg);
         curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
         curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &responseCode);
 
         // !!!
         // Debug area //
@@ -113,7 +131,7 @@ int HTTP_Discord_Webhook(const char *payload, ...)
     }
     
     curl_multi_add_handle(multi_handle, curl);
-    CURLMcode mc = curl_multi_perform(multi_handle, &handles);
+    curl_multi_perform(multi_handle, &handles);
     curl_multi_remove_handle(multi_handle, curl);
     curl_multi_cleanup(multi_handle);
     curl_easy_cleanup(curl);
