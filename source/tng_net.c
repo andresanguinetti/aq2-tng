@@ -16,7 +16,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 */
 
 //
-// tng_net.c - Discord webhook integration for chat relay
+// tng_net.c - CURL integration for various uses
 //
 
 #include "g_local.h"
@@ -86,11 +86,6 @@ void cURL_MultiSend(void)
     curl_multi_add_handle(multi_handle, curl);
     while(handle_count) {
         CURLMcode mc = curl_multi_perform(multi_handle, &handle_count);
-        
-        if(handle_count) {
-            mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
-        }
-
         if(mc)
             break;
     }
@@ -176,7 +171,5 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1L);
     curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
 
-    curl_multi_add_handle(multi_handle, curl);
-
-    return 0;
+    return curl_multi_add_handle(multi_handle, curl);
 }
