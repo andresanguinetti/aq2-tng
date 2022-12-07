@@ -59,6 +59,10 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 
 void cURL_MultiSend(void)
 {
+    // Do nothing if we don't have a handle to process
+    if(handle_count < 1){
+        return;
+    }
     struct curl_slist *headerlist = NULL;
 
     CURL *curl = curl_easy_init();
