@@ -153,6 +153,7 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
         }
         text[strcspn(text, "\n")] = 0;
         Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", hostname->string, text);
+        gi.dprintf("%s\n", jsonmsg);
     }
     else if (payloadType == CURL_AWS_API)
     {
