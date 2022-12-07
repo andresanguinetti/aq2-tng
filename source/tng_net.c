@@ -23,7 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <curl/curl.h>
 
 static qboolean     curl_initialized;
-int handle_count = 0;
+int handle_count;
 
 /*
 ===============
@@ -82,15 +82,12 @@ void cURL_MultiSend(void)
     //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     // End Debug //
     
-    if(curl && multi_handle) {
-        curl_multi_add_handle(multi_handle, curl);
-        curl_multi_perform(multi_handle, &handle_count);
-        /* always cleanup */
-        curl_multi_cleanup(multi_handle);
-        curl_easy_cleanup(curl);
-        curl_slist_free_all(headers);
-        handle_count--;
-    }
+    curl_multi_add_handle(multi_handle, curl);
+    curl_multi_perform(multi_handle, &handle_count);
+    /* always cleanup */
+    curl_multi_cleanup(multi_handle);
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
 }
 
 int cURL_SendMsg(int payloadType, const char *payload, ...)
