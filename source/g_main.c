@@ -1117,7 +1117,10 @@ void G_RunFrame (void)
 	qboolean empty = false;
 
 	// IRC poll
-	IRC_poll ();
+	IRC_poll();
+
+	// cURL poll
+	cURL_MultiSend();
 
 	// If the server is empty, don't wait at intermission.
 	empty = ! _numclients();
