@@ -98,34 +98,34 @@ int cURL_AddHandler(char payloadURL, const char *payload)
         //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         // End Debug //
     }
-    curl_MultiSend()
+    cURL_MultiSend();
     return 0;
 }
 
 void cURL_MultiSend(void)
 {
     int still_running = 0;
+    struct curl_slist *headerlist = NULL;
 
     CURL *curl = curl_easy_init();
     CURLM *multi_handle;
     multi_handle = curl_multi_init();
 
-    curl_multi_add_handle(multi_handle, curl);
-    CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
-    if(still_running)
-        /* wait for activity, timeout or "nothing" */
-        mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
-
-      if(mc)
-        break;
+    if(curl && multi_handle) {
+        curl_multi_add_handle(multi_handle, curl);
+        CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
+        if(still_running) {
+            /* wait for activity, timeout or "nothing" */
+            mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
+        }
+        /* always cleanup */
+        curl_multi_cleanup(multi_handle);
+        curl_easy_cleanup(curl);
+        curl_slist_free_all(headerlist);
     }
-    curl_multi_cleanup(multi_handle);
-    /* always cleanup */
-    curl_easy_cleanup(curl);
-    curl_slist_free_all(headerlist);
 }
 
-char cURL_SendMsg(int payloadType, const char *payload, ...)
+int cURL_SendMsg(int payloadType, const char *payload, ...)
 {
 	va_list argptr;
 	char text[151];
@@ -188,7 +188,7 @@ char cURL_SendMsg(int payloadType, const char *payload, ...)
     {
         // Invalid payloadType supplied, do nothing
         gi.dprintf("cURL_Easy_Send error: invalid payloadType %i", payloadType);
-        return;
+        return 0;
     }
     
     // Send this off to be consumed by curl

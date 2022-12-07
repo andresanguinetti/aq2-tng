@@ -1225,7 +1225,8 @@ extern cvar_t *sv_curl_status_api_url;
 #define CURL_AWS_API					2
 
 void cURL_MultiSend(void);
-char cURL_SendMsg(int payloadType, const char *payload, ...);
+int cURL_AddHandler(char payloadURL, const char *payload);
+int cURL_SendMsg(int payloadType, const char *payload, ...);
 // End cURL integration
 
 
