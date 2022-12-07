@@ -77,12 +77,11 @@ void cURL_MultiSend(void)
     // Debug area //
     // Do not print responses from curl request
     // Comment this line...
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+    //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
     // ...and uncomment this line for full debug mode
-    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     // End Debug //
 
-    
     curl_multi_add_handle(multi_handle, curl);
     while(handle_count) {
         CURLMcode mc = curl_multi_perform(multi_handle, &handle_count);
@@ -171,5 +170,35 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1L);
     curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
 
-    return curl_multi_add_handle(multi_handle, curl);
+    struct curl_slist *headers = NULL;
+    headers = curl_slist_append(headers, "Expect:");
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+    // Do nothing if we don't have a handle to process
+    // if(handle_count < 1){
+    //     return;
+    // }
+
+    // !!!
+    // Debug area //
+    // Do not print responses from curl request
+    // Comment this line...
+    //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+    // ...and uncomment this line for full debug mode
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    // End Debug //
+
+    curl_multi_add_handle(multi_handle, curl);
+    while(handle_count) {
+        CURLMcode mc = curl_multi_perform(multi_handle, &handle_count);
+        if(mc)
+            break;
+    }
+    /* always cleanup */
+    curl_multi_cleanup(multi_handle);
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
+
+    return 0;
 }
