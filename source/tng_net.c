@@ -97,6 +97,8 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     char jsonmsg[1024];
     char url[512];
 
+    gi.dprintf("I have been called 1");
+
     /// Sanity checks before we do anything
     // If sv_curl_enable is disabled, take a hike
 	if (!sv_curl_enable->value){
@@ -113,7 +115,7 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     va_end (argptr);
 
     if (payloadType == CURL_STATUS_API) {
-
+        gi.dprintf("I have been called 2");
         Q_strncpyz(url, sv_curl_status_api_url->string, sizeof(url));
         if (strcmp(url,"disabled") == 0) {
             return 0;
@@ -160,7 +162,7 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     }
     
     // Send this off to be consumed by curl
-    
+    gi.dprintf("I have been called 3");
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonmsg);
@@ -169,5 +171,6 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
 
     curl_multi_add_handle(multi_handle, curl);
 
+    gi.dprintf("I have been called 4");
     return 0;
 }
