@@ -1295,7 +1295,7 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 #endif
 
 #if USE_AQTION
-	cURL_AddHandler(CURL_STATUS_API, "unused");
+	cURL_SendMsg(CURL_STATUS_API, "unused");
 #endif
 }
 
