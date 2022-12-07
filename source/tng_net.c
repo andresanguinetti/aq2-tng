@@ -145,7 +145,8 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
         ltk_loadbots->string
         );
     } 
-        else if (payloadType == CURL_DISCORD_CHAT) // Send message to Discord Webhook URL
+    
+    if (payloadType == CURL_DISCORD_CHAT) // Send message to Discord Webhook URL
     {
         Q_strncpyz(url, sv_curl_discord_chat_url->string, sizeof(url));
         if (strcmp(url,"disabled") == 0) {
@@ -153,14 +154,15 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
         }
         text[strcspn(text, "\n")] = 0;
         Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", hostname->string, text);
-        gi.dprintf("%s\n", jsonmsg);
     }
-    else if (payloadType == CURL_AWS_API)
+    
+    if (payloadType == CURL_AWS_API)
     {
         text[strcspn(text, "\n")] = 0;
         Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"aqtionapi\": \"```(%s) - %s```\"}", hostname->string, text);
     }
-        else 
+    
+    if (payloadType > CURL_ENDPOINTS_MAX)
     {
         // Invalid payloadType supplied, do nothing
         gi.dprintf("cURL_SendMsg error: invalid payloadType %i", payloadType);

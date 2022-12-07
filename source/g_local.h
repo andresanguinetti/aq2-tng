@@ -1224,6 +1224,7 @@ extern cvar_t *sv_curl_discord_chat_url;
 #define CURL_STATUS_API					0
 #define CURL_DISCORD_CHAT				1
 #define CURL_AWS_API					2
+#define CURL_ENDPOINTS_MAX				2
 
 void cURL_MultiSend(void);
 int cURL_SendMsg(int payloadType, const char *payload, ...);
