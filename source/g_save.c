@@ -376,6 +376,7 @@ void InitGame( void )
 	teamplay = gi.cvar( "teamplay", "0", /*CVAR_SERVERINFO | */  CVAR_LATCH ); //Removed in favor of 'gm' (gamemode)
 	motd_time = gi.cvar( "motd_time", "2", 0 );
 	hostname = gi.cvar( "hostname", "unnamed", CVAR_SERVERINFO );
+	net_port = gi.cvar("net_port", "27910", CVAR_SERVERINFO);
 	strtwpn = gi.cvar( "dmweapon", MK23_NAME, 0 );
 	actionmaps = gi.cvar( "actionmaps", "1", 0 );
 	if (actionmaps->value && num_maps < 1)

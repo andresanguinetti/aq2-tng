@@ -80,8 +80,9 @@ int cURL_Easy_Send(int payloadType, const char *payload, ...)
             Q_strncpyz(url, sv_curl_status_api_url->string, sizeof(url));
         }
         // Q_strncpyz(dhost, text, sizeof(dhost));
-        Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"status\": {\"hostname\": \"%s\", \"dmflags\": \"%s\", \"gamemode\": \"%i\", \"gamemodeflags\": \"%i\", \"actionversion\": \"%s\", \"maxclients\": \"%s\", \"fraglimit\": \"%s\", \"timelimit\": \"%s\", \"roundlimit\": \"%s\", \"roundtimelimit\": \"%s\", \"dm_choose\": \"%s\", \"tgren\": \"%s\", \"e_enhancedSlippers\": \"%s\", \"server_id\": \"%s\", \"stat_logs\": \"%s\", \"sv_antilag\": \"%s\", \"sv_antilag_interp\": \"%s\", \"g_spawn_items\": \"%s\", \"ltk_loadbots\": \"%s\"}}", 
+        Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"status\": {\"hostname\": \"%s\", \"port\": \"%s\", \"dmflags\": \"%s\", \"gamemode\": \"%i\", \"gamemodeflags\": \"%i\", \"actionversion\": \"%s\", \"maxclients\": \"%s\", \"fraglimit\": \"%s\", \"timelimit\": \"%s\", \"roundlimit\": \"%s\", \"roundtimelimit\": \"%s\", \"dm_choose\": \"%s\", \"tgren\": \"%s\", \"e_enhancedSlippers\": \"%s\", \"server_id\": \"%s\", \"stat_logs\": \"%s\", \"sv_antilag\": \"%s\", \"sv_antilag_interp\": \"%s\", \"g_spawn_items\": \"%s\", \"ltk_loadbots\": \"%s\"}}", 
         hostname->string,
+        net_port->string,
         dmflags->string,
         Gamemode(),
         Gamemodeflag(),

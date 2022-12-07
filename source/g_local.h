@@ -979,6 +979,7 @@ extern cvar_t *deathmatch;
 extern cvar_t *dmflags;
 extern cvar_t *needpass;
 extern cvar_t *hostname;
+extern cvar_t *net_port;
 extern cvar_t *teamplay;
 extern cvar_t *radiolog;
 extern cvar_t *motd_time;

@@ -286,6 +286,7 @@ edict_t *g_edicts;
 
 //FIREBLADE
 cvar_t *hostname;
+cvar_t *net_port;
 cvar_t *teamplay;
 cvar_t *radiolog;
 cvar_t *motd_time;
