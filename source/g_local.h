@@ -1219,13 +1219,13 @@ extern cvar_t *cl_discord_avatar;
 // cURL integration
 extern cvar_t *sv_curl_enable;
 extern cvar_t *sv_curl_status_api_url;
+extern cvar_t *sv_curl_discord_chat_url;
 
 #define CURL_STATUS_API					0
 #define CURL_DISCORD_CHAT				1
 #define CURL_AWS_API					2
 
 void cURL_MultiSend(void);
-int cURL_AddHandler(const char *url, const char *jsonmsg);
 int cURL_SendMsg(int payloadType, const char *payload, ...);
 // End cURL integration
 

@@ -571,6 +571,7 @@ void InitGame( void )
   	g_spawn_items = gi.cvar("g_spawn_items", "0", CVAR_LATCH);
 	sv_curl_enable = gi.cvar("sv_curl_enable", "0", 0);
 	sv_curl_status_api_url = gi.cvar("sv_curl_status_api_url", "disabled", 0);
+	sv_curl_discord_chat_url = gi.cvar("sv_curl_discord_chat_url", "disabled", 0);
 
 	// Discord SDK integration with Q2Pro
 	cl_discord = gi.cvar("cl_discord", "0", 0);

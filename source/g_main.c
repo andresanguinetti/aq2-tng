@@ -495,6 +495,7 @@ cvar_t *sv_idleremove;
 cvar_t *g_spawn_items;
 cvar_t *sv_curl_enable;
 cvar_t *sv_curl_status_api_url;
+cvar_t *sv_curl_discord_chat_url;
 
 // Discord SDK integration with Q2Pro
 cvar_t *cl_discord;

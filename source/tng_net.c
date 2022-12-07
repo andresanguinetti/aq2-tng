@@ -147,6 +147,10 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     } 
         else if (payloadType == CURL_DISCORD_CHAT) // Send message to Discord Webhook URL
     {
+        Q_strncpyz(url, sv_curl_discord_chat_url->string, sizeof(url));
+        if (strcmp(url,"disabled") == 0) {
+            return 0;
+        }
         text[strcspn(text, "\n")] = 0;
         Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"content\": \"```(%s) - %s```\"}", hostname->string, text);
     }
