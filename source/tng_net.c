@@ -23,6 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <curl/curl.h>
 
 static qboolean     curl_initialized;
+int handle_count = 0;
 
 /*
 ===============
@@ -54,6 +55,25 @@ void cURL_Shutdown(void)
 static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 {
    return size * nmemb;
+}
+
+void cURL_MultiSend(void)
+{
+    struct curl_slist *headerlist = NULL;
+
+    CURL *curl = curl_easy_init();
+    CURLM *multi_handle;
+    multi_handle = curl_multi_init();
+
+    if(curl && multi_handle) {
+        curl_multi_add_handle(multi_handle, curl);
+        curl_multi_perform(multi_handle, &still_running);
+        /* always cleanup */
+        curl_multi_cleanup(multi_handle);
+        curl_easy_cleanup(curl);
+        curl_slist_free_all(headerlist);
+        handle_count--;
+    }
 }
 
 int cURL_AddHandler(char payloadURL, const char *payload)
@@ -98,31 +118,9 @@ int cURL_AddHandler(char payloadURL, const char *payload)
         //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         // End Debug //
     }
+    handle_count++;
     cURL_MultiSend();
     return 0;
-}
-
-void cURL_MultiSend(void)
-{
-    int still_running = 0;
-    struct curl_slist *headerlist = NULL;
-
-    CURL *curl = curl_easy_init();
-    CURLM *multi_handle;
-    multi_handle = curl_multi_init();
-
-    if(curl && multi_handle) {
-        curl_multi_add_handle(multi_handle, curl);
-        CURLMcode mc = curl_multi_perform(multi_handle, &still_running);
-        if(still_running) {
-            /* wait for activity, timeout or "nothing" */
-            mc = curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
-        }
-        /* always cleanup */
-        curl_multi_cleanup(multi_handle);
-        curl_easy_cleanup(curl);
-        curl_slist_free_all(headerlist);
-    }
 }
 
 int cURL_SendMsg(int payloadType, const char *payload, ...)
@@ -192,7 +190,7 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     }
     
     // Send this off to be consumed by curl
-    curl_AddHandler(url, jsonmsg);
+    cURL_AddHandler(url, jsonmsg);
 
     return 0;
 }
