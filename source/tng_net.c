@@ -82,14 +82,13 @@ void cURL_MultiSend(void)
     //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     // End Debug //
 
-    gi.dprintf("I have been called");
     curl_multi_add_handle(multi_handle, curl);
     curl_multi_perform(multi_handle, &handle_count);
+    curl_multi_poll(multi_handle, NULL, 0, 1000, NULL);
     /* always cleanup */
     curl_multi_cleanup(multi_handle);
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
-    gi.dprintf("I probably didn't do shit");
 }
 
 int cURL_SendMsg(int payloadType, const char *payload, ...)
