@@ -67,7 +67,7 @@ void cURL_MultiSend(void)
 
     if(curl && multi_handle) {
         curl_multi_add_handle(multi_handle, curl);
-        curl_multi_perform(multi_handle, &still_running);
+        curl_multi_perform(multi_handle, &handle_count);
         /* always cleanup */
         curl_multi_cleanup(multi_handle);
         curl_easy_cleanup(curl);
@@ -76,7 +76,7 @@ void cURL_MultiSend(void)
     }
 }
 
-int cURL_AddHandler(char payloadURL, const char *payload)
+int cURL_AddHandler(const char *url, const char *jsonmsg)
 {
     CURL *curl = curl_easy_init();
     CURLM *multi_handle;
@@ -102,10 +102,10 @@ int cURL_AddHandler(char payloadURL, const char *payload)
             CURLOPT_VERBOSE - Enables more verbose output, pair with above
         */
 
-        curl_easy_setopt(curl, CURLOPT_URL, payloadURL);
+        curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonmsg);
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1L);
         curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
 
