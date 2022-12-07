@@ -57,7 +57,6 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 }
 int cURL_Easy_Send(int payloadType, const char *payload, ...)
 {
-    int handles = 1;
 	va_list argptr;
 	char text[151];
     char jsonmsg[1024];
@@ -69,18 +68,39 @@ int cURL_Easy_Send(int payloadType, const char *payload, ...)
 	if (!sv_curl_enable->value){
 		return 0;
 	}
-
-    // Check if calling to status API is disabled
-    if (strcmp(url,"disabled") == 0) {
-        return 0;
-    }
-
+    
     /// So far so good, time to go to work
     // Get a string representation of these cvars
-    strcpy(url, sv_curl_status_api_url->string);
 
     if (payloadType == CURL_STATUS_API) {
-        Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"status\": \"(%s) - %s\"}", dhost, text);
+        // We ignore the payload here, it is not used
+        if (strcmp(url,"disabled") == 0) {
+            return 0;
+        } else {
+            Q_strncpyz(url, sv_curl_status_api_url->string, sizeof(url));
+        }
+        // Q_strncpyz(dhost, text, sizeof(dhost));
+        Com_sprintf(jsonmsg, sizeof(jsonmsg), "{\"status\": {\"hostname\": \"%s\", \"dmflags\": \"%s\", \"gamemode\": \"%i\", \"gamemodeflags\": \"%i\", \"actionversion\": \"%s\", \"maxclients\": \"%s\", \"fraglimit\": \"%s\", \"timelimit\": \"%s\", \"roundlimit\": \"%s\", \"roundtimelimit\": \"%s\", \"dm_choose\": \"%s\", \"tgren\": \"%s\", \"e_enhancedSlippers\": \"%s\", \"server_id\": \"%s\", \"stat_logs\": \"%s\", \"sv_antilag\": \"%s\", \"sv_antilag_interp\": \"%s\", \"g_spawn_items\": \"%s\", \"ltk_loadbots\": \"%s\"}}", 
+        hostname->string,
+        dmflags->string,
+        Gamemode(),
+        Gamemodeflag(),
+        actionversion->string,
+        maxclients->string,
+        fraglimit->string,
+        timelimit->string,
+        roundlimit->string,
+        roundtimelimit->string,
+        dm_choose->string,
+        tgren->string,
+        e_enhancedSlippers->string,
+        server_id->string,
+        stat_logs->string,
+        sv_antilag->string,
+        sv_antilag_interp->string,
+        g_spawn_items->string,
+        ltk_loadbots->string
+        );
     } else if (payloadType == CURL_DISCORD_CHAT) {
         // Scraping that beautiful data payload
         va_start (argptr, payload);
@@ -109,31 +129,40 @@ int cURL_Easy_Send(int payloadType, const char *payload, ...)
         headers = curl_slist_append(headers, "Expect:");
         headers = curl_slist_append(headers, "Content-Type: application/json");
 
-        // Retain DNS info so we don't waste time doing lookups constantly
-        curl_easy_setopt(curl, CURLOPT_DNS_CACHE_TIMEOUT, 2L);
-        //
+        /*
+        cURL options:
+            CURLOPT_URL - Endpoint to send data
+            CURLOPT_CUSTOMREQUEST - POST method
+            CURLOPT_HTTPHEADER - Informing the endpoint payload is JSON
+            CURLOPT_POSTFIELDS - Content (important part)
+            CURLOPT_TIMEOUT - 1 second timeout and give up
+            CURLOPT_FAILONERROR - Send will fail if response code is >=400
 
-        curl_easy_setopt(curl, CURLOPT_URL, webhook_url);
+            Debug options:
+            CURLOPT_WRITEFUNCTION - Sends response to a blackhole, to not 
+                clutter logs/console.  Comment to see full response.
+            CURLOPT_VERBOSE - Enables more verbose output, pair with above
+        */
+
+        curl_easy_setopt(curl, CURLOPT_URL, url);
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, jsonmsg);
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 1L);
         curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
-        curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
 
         // !!!
         // Debug area //
         // Do not print responses from curl request
         // Comment this line...
-        //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
         // ...and uncomment this line for full debug mode
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         // End Debug //
     }
     
-    curl_multi_add_handle(multi_handle, curl);
-    curl_multi_perform(multi_handle, &handles);
-    curl_multi_remove_handle(multi_handle, curl);
-    curl_multi_cleanup(multi_handle);
-    curl_easy_cleanup(curl);
+	curl_easy_perform(curl); // This sends the payload
+	curl_easy_cleanup(curl); // This cleans up the handle
+	curl_global_cleanup(); // Clean everything else up
     return 0;
 }

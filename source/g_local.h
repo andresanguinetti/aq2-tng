@@ -1222,6 +1222,7 @@ extern cvar_t *sv_curl_status_api_url;
 #define CURL_STATUS_API					0
 #define CURL_DISCORD_CHAT				1
 
+int cURL_Easy_Send(int payloadType, const char *payload, ...);
 // End cURL integration
 
 

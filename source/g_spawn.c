@@ -1293,6 +1293,10 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 	ACEND_LoadNodes();
 	ACESP_LoadBotConfig();
 #endif
+
+#if USE_AQTION
+	cURL_Easy_Send(CURL_STATUS_API, "unused");
+#endif
 }
 
 

@@ -842,7 +842,6 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 			if (stat_logs->value) { // Only create stats logs if stat_logs is 1
 				LogKill(self, inflictor, self->client->attacker);
 			}
-			HTTP_Discord_Webhook(death_msg);
 			#endif
 
 			self->client->attacker->client->radio_num_kills++;
@@ -881,7 +880,6 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 			if (stat_logs->value) { // Only create stats logs if stat_logs is 1
 				LogWorldKill(self);
 			}
-			HTTP_Discord_Webhook(death_msg);
 			#endif
 		}
 		return;
@@ -1223,7 +1221,6 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 			if (stat_logs->value) {
 				LogKill(self, inflictor, attacker);
 			}
-			HTTP_Discord_Webhook(death_msg);
 			#endif
 
 			if (friendlyFire) {
@@ -1254,7 +1251,6 @@ void ClientObituary(edict_t * self, edict_t * inflictor, edict_t * attacker)
 	if (stat_logs->value) { // Only create stats logs if stat_logs is 1
 		LogWorldKill(self);
 	}
-	HTTP_Discord_Webhook(death_msg);
 	#endif
 
 	Subtract_Frag(self);	//self->client->resp.score--;
