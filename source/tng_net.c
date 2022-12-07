@@ -69,10 +69,9 @@ void cURL_MultiSend(void)
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
     // Do nothing if we don't have a handle to process
-    gi.dprintf("Handle count is %i", handle_count);
-    if(handle_count < 1){
-        return;
-    }
+    // if(handle_count < 1){
+    //     return;
+    // }
 
     // !!!
     // Debug area //
