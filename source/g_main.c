@@ -270,7 +270,6 @@
 
 #include <time.h>
 #include "g_local.h"
-#include <pthread.h>
 
 game_locals_t game;
 level_locals_t level;
@@ -1117,16 +1116,9 @@ void G_RunFrame (void)
 	int i;
 	edict_t *ent;
 	qboolean empty = false;
-	pthread_t thread;
 
 	// IRC poll
 	IRC_poll();
-
-	// cURL poll
-	#ifndef WIN32
-	pthread_create(&thread, NULL, cURL_MultiSend, NULL);
-	pthread_exit(NULL);
-	#endif
 
 	// If the server is empty, don't wait at intermission.
 	empty = ! _numclients();

@@ -21,9 +21,16 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "g_local.h"
 #include <curl/curl.h>
+#include <pthread.h>
 
 static qboolean     curl_initialized;
 int handle_count = 1;
+
+struct thread_data_t {
+    int payloadType;
+    const char *payload;
+};
+struct thread_data_t thread_data_array[];
 
 /*
 ===============
@@ -57,41 +64,21 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
    return size * nmemb;
 }
 
-void cURL_MultiSend(void)
+void cURL_CallSendMsgThread(int payloadType, const char *payload, ...)
 {
-    CURL *curl = curl_easy_init();
-    CURLM *multi_handle;
-    multi_handle = curl_multi_init();
+    struct thread_data data;
+    pthread_t thread;
+    int payloadId;
+    char payloadMsg;
 
-    struct curl_slist *headers = NULL;
-    headers = curl_slist_append(headers, "Expect:");
-    headers = curl_slist_append(headers, "Content-Type: application/json");
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    data = (struct thread_data *) threadargs;
+    payloadId = data->payloadType;
+    payloadMsg = data->payload;
 
-    // Do nothing if we don't have a handle to process
-    // if(handle_count < 1){
-    //     return;
-    // }
-
-    // !!!
-    // Debug area //
-    // Do not print responses from curl request
-    // Comment this line...
-    //curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-    // ...and uncomment this line for full debug mode
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-    // End Debug //
-
-    curl_multi_add_handle(multi_handle, curl);
-    while(handle_count) {
-        CURLMcode mc = curl_multi_perform(multi_handle, &handle_count);
-        if(mc)
-            break;
-    }
-    /* always cleanup */
-    curl_multi_cleanup(multi_handle);
-    curl_easy_cleanup(curl);
-    curl_slist_free_all(headers);
+    #ifndef WIN32
+	pthread_create(&thread, NULL, cURL_SendMsg, (void *) &thread_data_array);
+	pthread_exit(NULL);
+	#endif
 }
 
 int cURL_SendMsg(int payloadType, const char *payload, ...)
@@ -193,6 +180,8 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     // ...and uncomment this line for full debug mode
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     // End Debug //
+
+    	// cURL poll
 
     curl_easy_perform(curl);
     curl_easy_cleanup(curl);
