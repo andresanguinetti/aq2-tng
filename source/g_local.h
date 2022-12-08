@@ -1227,6 +1227,7 @@ extern cvar_t *sv_curl_discord_chat_url;
 #define CURL_ENDPOINTS_MAX				2
 
 void cURL_MultiSend(void);
+void cURL_CallSendMsgThread(int payloadType, const char *payload, ...)
 int cURL_SendMsg(int payloadType, const char *payload, ...);
 // End cURL integration
 
