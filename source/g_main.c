@@ -1125,7 +1125,7 @@ void G_RunFrame (void)
 	// cURL poll
 	#ifndef WIN32
 	pthread_create(&thread, NULL, cURL_MultiSend, NULL);
-	pthread_join(thread, NULL);
+	pthread_exit(NULL);
 	#endif
 
 	// If the server is empty, don't wait at intermission.
