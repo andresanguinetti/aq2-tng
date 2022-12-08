@@ -69,6 +69,7 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 
 void cURL_CallSendMsgThread(int payloadType, const char *payload, ...)
 {
+    #ifndef WIN32
     pthread_t thread;
     char text[512];
     va_list argptr;
@@ -80,7 +81,7 @@ void cURL_CallSendMsgThread(int payloadType, const char *payload, ...)
     thread_data_array->payloadType = payloadType;
     thread_data_array->payload = text;
 
-    #ifndef WIN32
+    
 	pthread_create(&thread, NULL, cURL_SendMsg, (void *) &thread_data_array);
 	pthread_exit(NULL);
     #else
