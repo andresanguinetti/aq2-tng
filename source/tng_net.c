@@ -90,7 +90,7 @@ void cURL_CallSendMsgThread(int payloadType, const char *payload, ...)
 	#endif
 }
 
-int cURL_SendMsg(void *threadargs)
+void cURL_SendMsg(void *threadargs)
 {
     int payloadType;
 	char text[1024];
@@ -196,6 +196,4 @@ int cURL_SendMsg(void *threadargs)
     curl_easy_perform(curl);
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
-
-    return 0;
 }
