@@ -29,7 +29,7 @@ int handle_count = 1;
 ===============
 HTTP_Init
 
-Init libcurl and multi handle.
+Init libcurl.
 ===============
 */
 void cURL_Init(void)
@@ -109,8 +109,6 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     
     /// So far so good, time to go to work
     CURL *curl = curl_easy_init();
-    CURLM *multi_handle;
-    multi_handle = curl_multi_init();
 
     va_start (argptr, payload);
     vsnprintf (text, sizeof(text), payload, argptr);
@@ -196,14 +194,7 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     // End Debug //
 
-    curl_multi_add_handle(multi_handle, curl);
-    while(handle_count) {
-        CURLMcode mc = curl_multi_perform(multi_handle, &handle_count);
-        if(mc)
-            break;
-    }
-    /* always cleanup */
-    curl_multi_cleanup(multi_handle);
+    curl_easy_perform(curl);
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
 
