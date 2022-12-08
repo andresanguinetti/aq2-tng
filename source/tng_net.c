@@ -21,16 +21,19 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "g_local.h"
 #include <curl/curl.h>
+
+#ifndef WIN32
 #include <pthread.h>
+#endif
 
 static qboolean     curl_initialized;
 int handle_count = 1;
 
 struct thread_data_t {
     int payloadType;
-    const char *payload;
+    char *payload;
 };
-struct thread_data_t thread_data_array[];
+struct thread_data_t thread_data_array[1];
 
 /*
 ===============
@@ -66,27 +69,37 @@ static size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 
 void cURL_CallSendMsgThread(int payloadType, const char *payload, ...)
 {
-    struct thread_data data;
     pthread_t thread;
-    int payloadId;
-    char payloadMsg;
+    char text[512];
+    va_list argptr;
 
-    data = (struct thread_data *) threadargs;
-    payloadId = data->payloadType;
-    payloadMsg = data->payload;
+    va_start (argptr, payload);
+    vsnprintf (text, sizeof(text), payload, argptr);
+    va_end (argptr);
+
+    thread_data_array->payloadType = payloadType;
+    thread_data_array->payload = text;
 
     #ifndef WIN32
 	pthread_create(&thread, NULL, cURL_SendMsg, (void *) &thread_data_array);
 	pthread_exit(NULL);
+    #else
+    // Not supporting Win32 at this time for threading
+    return;
 	#endif
 }
 
-int cURL_SendMsg(int payloadType, const char *payload, ...)
+int cURL_SendMsg(void *threadargs)
 {
-	va_list argptr;
-	char text[151];
+    int payloadType;
+	char text[1024];
     char jsonmsg[1024];
     char url[512];
+
+    struct thread_data_t *data;
+    data = (struct thread_data_t *) threadargs;
+    data->payload = text;
+    data->payloadType = payloadType;
 
     /// Sanity checks before we do anything
     // If sv_curl_enable is disabled, take a hike
@@ -96,10 +109,6 @@ int cURL_SendMsg(int payloadType, const char *payload, ...)
     
     /// So far so good, time to go to work
     CURL *curl = curl_easy_init();
-
-    va_start (argptr, payload);
-    vsnprintf (text, sizeof(text), payload, argptr);
-    va_end (argptr);
 
     if (payloadType == CURL_STATUS_API) {
         Q_strncpyz(url, sv_curl_status_api_url->string, sizeof(url));
