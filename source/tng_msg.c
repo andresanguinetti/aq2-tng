@@ -22,33 +22,50 @@ cvar_t* logfile_name;
 void Write_MsgToLog(const char logType, const char* msg, ...)
 {
 	va_list	argptr;
+	char	msg_print[1024];
 	char	msg_cpy[1024];
 	char	logpath[MAX_QPATH];
+	char	logsuffix[10];
 	FILE* 	f;
+	logfile_name = gi.cvar("logfile_name", "", CVAR_NOSET);
+	int eventtime = (int)time(NULL);
 
 	// Do nothing if logfile_msgs is 0
 	if(!logfile_msgs->value)
 		return;
 
+
+	// Take va args and format into a single char
 	va_start(argptr, msg);
 	vsprintf(msg_cpy, msg, argptr);
 	va_end(argptr);
 
-	logfile_name = gi.cvar("logfile_name", "", CVAR_NOSET);
-
-	// Log to the appropriate file, stats go in one, everything else to the other
 	if (Q_stricmp(logType, "stats") == 0) {
-		sprintf(logpath, "action/logs/%s.%s", logfile_name->string, "stats");
+		Q_strncpyz(logsuffix, "stats", sizeof(logsuffix));
+		Q_strncpyz(msg_print, msg_cpy, sizeof(msg_print));
 	} else {
-		sprintf(logpath, "action/logs/%s.%s", logfile_name->string, "srv");
+		Q_strncpyz(logsuffix, "srv", sizeof(logsuffix));
+
+		// JSONify if not stats (already JSON-ified)
+		Com_sprintf(
+			msg_print, sizeof(msg_print),
+			"{\"%s\":{\"sid\":\"%s\",\"time\":\"%d\"\"msg\":\"%s\"}}\n",
+			logType,
+			server_id->string,
+			eventtime,
+			msg_cpy
+		);
 	}
+
+	// Log to the named file
+	sprintf(logpath, "action/logs/%s.%s", logfile_name->string, logsuffix);
 
 	if ((f = fopen(logpath, "a")) != NULL)
 	{
-		fprintf(f, "%s", msg_cpy);
+		fprintf(f, "%s", msg_print);
 		fclose(f);
 	}
 	else
-		gi.dprintf("Write_MsgToLog: Error writing to %s\n", logfile_name->string);
+		gi.dprintf("Write_MsgToLog: Error writing to %s.%s\n", logfile_name->string, logsuffix);
 
 }
