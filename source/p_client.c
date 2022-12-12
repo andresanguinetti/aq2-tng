@@ -2768,6 +2768,7 @@ void ClientBeginDeathmatch(edict_t * ent)
 
 	gi.bprintf(PRINT_HIGH, "%s entered the game\n", ent->client->pers.netname);
 	IRC_printf(IRC_T_SERVER, "%n entered the game", ent->client->pers.netname);
+	Write_MsgToLog(SERVER_LOG, "%s entered the game", ent->client->pers.netname);
 
 	// TNG:Freud Automaticly join saved teams.
 	if (saved_team && auto_join->value && teamplay->value)
@@ -2854,10 +2855,12 @@ void ClientUserinfoChanged(edict_t *ent, char *userinfo)
 					continue;
 				gi.cprintf( other, PRINT_MEDIUM, "%s is now known as %s.\n", client->pers.netname, tnick ); //TempFile
 			}
-			if( dedicated->value )
+			if( dedicated->value ) {
 				gi.dprintf( "%s is now known as %s.\n", client->pers.netname, tnick ); //TempFile
-			IRC_printf(IRC_T_SERVER, "%n is now known as %n.", client->pers.netname, tnick);
+				IRC_printf(IRC_T_SERVER, "%n is now known as %n.", client->pers.netname, tnick);
 			nickChanged = true;
+				Write_MsgToLog(SERVER_LOG, "%s is now known as %s", client->pers.netname, tnick);
+			}
 		}
 		strcpy(client->pers.netname, tnick);
 	}
@@ -3018,9 +3021,7 @@ qboolean ClientConnect(edict_t * ent, char *userinfo)
 		value = Info_ValueForKey(userinfo, "name");
 		gi.dprintf("%s@%s connected\n", value, ipaddr_buf);
 		IRC_printf(IRC_T_SERVER, "%n@%s connected", value, ipaddr_buf);
-		if(logfile_msgs->value) {
-			Write_MsgToLog(ANNOUNCE_LOG, value);
-		}
+		Write_MsgToLog(SERVER_LOG, "%s connected", value);
 	}
 
 	//rekkie -- silence ban -- s
@@ -3070,6 +3071,7 @@ void ClientDisconnect(edict_t * ent)
 
 	gi.bprintf(PRINT_HIGH, "%s disconnected\n", ent->client->pers.netname);
 	IRC_printf(IRC_T_SERVER, "%n disconnected", ent->client->pers.netname);
+	Write_MsgToLog(SERVER_LOG, "%s disconnected", ent->client->pers.netname);
 
 	if( !teamplay->value && !ent->client->pers.spectator )
 	{

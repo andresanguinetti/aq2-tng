@@ -24,17 +24,24 @@ void Write_MsgToLog(const char logType, const char* msg, ...)
 	va_list	argptr;
 	char	msg_cpy[1024];
 	char	logpath[MAX_QPATH];
-    char    logsuffix[8];
 	FILE* 	f;
 
-    Q_strncpyz(logsuffix, logType, sizeof(logsuffix));
+	// Do nothing if logfile_msgs is 0
+	if(!logfile_msgs->value)
+		return;
 
 	va_start(argptr, msg);
 	vsprintf(msg_cpy, msg, argptr);
 	va_end(argptr);
 
 	logfile_name = gi.cvar("logfile_name", "", CVAR_NOSET);
-	sprintf(logpath, "action/logs/%s.%s", logfile_name->string, logsuffix);
+
+	// Log to the appropriate file, stats go in one, everything else to the other
+	if (Q_stricmp(logType, "stats") == 0) {
+		sprintf(logpath, "action/logs/%s.%s", logfile_name->string, "stats");
+	} else {
+		sprintf(logpath, "action/logs/%s.%s", logfile_name->string, "srv");
+	}
 
 	if ((f = fopen(logpath, "a")) != NULL)
 	{
@@ -42,6 +49,6 @@ void Write_MsgToLog(const char logType, const char* msg, ...)
 		fclose(f);
 	}
 	else
-		gi.dprintf("Error writing to %s.%s\n", logfile_name->string, logsuffix);
+		gi.dprintf("Write_MsgToLog: Error writing to %s\n", logfile_name->string);
 
 }
