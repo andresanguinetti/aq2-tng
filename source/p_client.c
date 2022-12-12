@@ -319,6 +319,7 @@
 #include "g_local.h"
 #include "m_player.h"
 #include "cgf_sfx_glass.h"
+#include "tng_msg.h"
 
 
 static void FreeClientEdicts(gclient_t *client)
@@ -3017,6 +3018,9 @@ qboolean ClientConnect(edict_t * ent, char *userinfo)
 		value = Info_ValueForKey(userinfo, "name");
 		gi.dprintf("%s@%s connected\n", value, ipaddr_buf);
 		IRC_printf(IRC_T_SERVER, "%n@%s connected", value, ipaddr_buf);
+		if(logfile_msgs->value) {
+			Write_MsgToLog(ANNOUNCE_LOG, value);
+		}
 	}
 
 	//rekkie -- silence ban -- s
