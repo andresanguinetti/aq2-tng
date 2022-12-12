@@ -19,13 +19,14 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "g_local.h"
 
 cvar_t* logfile_name;
-void Write_MsgToLog(const char logType, const char* msg, ...)
+void Write_MsgToLog(int logType, const char* msg, ...)
 {
 	va_list	argptr;
 	char	msg_print[1024];
 	char	msg_cpy[1024];
 	char	logpath[MAX_QPATH];
-	char	logsuffix[10];
+	char	*logsuffix;
+	char	*JSONname;
 	FILE* 	f;
 	logfile_name = gi.cvar("logfile_name", "", CVAR_NOSET);
 	int eventtime = (int)time(NULL);
@@ -34,23 +35,35 @@ void Write_MsgToLog(const char logType, const char* msg, ...)
 	if(!logfile_msgs->value)
 		return;
 
-
 	// Take va args and format into a single char
 	va_start(argptr, msg);
 	vsprintf(msg_cpy, msg, argptr);
 	va_end(argptr);
 
-	if (Q_stricmp(logType, "stats") == 0) {
-		Q_strncpyz(logsuffix, "stats", sizeof(logsuffix));
-		Q_strncpyz(msg_print, msg_cpy, sizeof(msg_print));
-	} else {
+	switch(logType) {
+		case 0:
+			Q_strncpyz(logsuffix, "stats", sizeof(logsuffix));
+			Q_strncpyz(msg_print, msg_cpy, sizeof(msg_print));
+			break;
+		case 1:
+			Q_strncpyz(JSONname, "chat", sizeof(JSONname));
+			break;
+		case 2:
+			Q_strncpyz(JSONname, "server", sizeof(JSONname));
+			break;
+		case 3:
+			Q_strncpyz(JSONname, "vote", sizeof(JSONname));
+			break;
+	}
+
+	if (logType > 0) {
 		Q_strncpyz(logsuffix, "srv", sizeof(logsuffix));
 
 		// JSONify if not stats (already JSON-ified)
 		Com_sprintf(
 			msg_print, sizeof(msg_print),
 			"{\"%s\":{\"sid\":\"%s\",\"time\":\"%d\"\"msg\":\"%s\"}}\n",
-			logType,
+			JSONname,
 			server_id->string,
 			eventtime,
 			msg_cpy

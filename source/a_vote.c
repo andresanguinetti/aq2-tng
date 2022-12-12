@@ -129,7 +129,7 @@ Kicks the given (client) edict out of the server, reason will be printed before
 */
 static void KickClient(edict_t * target, char *reason)
 {
-	char *kickmsg;
+	char kickmsg[128];
 
 	if (target && target->client && target->inuse) {
 		gi.bprintf(PRINT_HIGH, "%s has to be KICKED from the server.\n", target->client->pers.netname);
