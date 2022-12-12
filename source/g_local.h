@@ -1593,6 +1593,9 @@ typedef struct
 	int spec_flags;
 	qboolean antilag_optout;
 
+	// darksaint
+	int cl_bandagesound;
+
 	int mk23_mode;		// firing mode, semi or auto
 	int mp5_mode;
 	int m4_mode;

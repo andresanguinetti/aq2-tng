@@ -609,7 +609,7 @@ Features
   for example, dm_choose, teamplay, etc.  Forced set to "0" for matchmode.  Set "0" for normal play.
 
 * Misc. client options
-  cl_bandagesound [0/1] - client cvar, plays misc/bandage.wav sound when bandaging, set to 0 for classic mode (default "1")
+  cl_bandagesound [0/1] - userinfo client cvar, plays misc/bandage.wav sound when bandaging, set to 0 for classic mode (default "1")
   cl_discord [0/1] - client cvar, 1 enables Discord integration, 0 disables (default "1")
 
   

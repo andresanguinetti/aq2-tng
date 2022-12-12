@@ -810,7 +810,7 @@ void Cmd_Bandage_f(edict_t *ent)
 		ent->client->ps.gunindex = gi.modelindex(ent->client->weapon->view_model);
 	gi.cprintf(ent, PRINT_HIGH, "You've started bandaging\n");
 
-	if (cl_bandagesound->value) {
+	if (ent->client->pers.cl_bandagesound) {
 		unicastSound(ent, gi.soundindex("misc/bandage.wav"), 0.5);
 	}
 }
