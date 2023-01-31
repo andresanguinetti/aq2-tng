@@ -187,7 +187,7 @@ Features
   (use an 'empty' sound for rock1r1b.wav as it's only played once together with the other wav file)
 
   Commands:
-  llsound [0/1] - When on (1), Low Lag Sounds will be used.
+  llsound [0/1] - Server cvar - when on (1), Low Lag Sounds will be used.
   Note: This functionality has been enhanced for AQtion, if this is disabled (0) then all weapon sounds will
   retain standard functionality and all clients will be forced to use the same sound file (mk23fire.wav, for example).
   If this is enabled (1), clients can adjust which sound file is played per weapon, based on the following cvars:
@@ -206,6 +206,7 @@ Features
   Commands:
   use_warnings [0/1] - When on (1), it will play all warnings such as "3 minutes left" and "Team X Wins".
   use_rewards [0/1] - When on (1), it will play the sounds on rewards such as "Impressive".
+  use_killcounts [0/1] - When on (1), the server will relay killstreak information to the player via console message.
   
 * Kevlar Helmet
   A new item, the Kevlar Helmet acts like the Kevlar Vest does, only it protects the head of the player wearing

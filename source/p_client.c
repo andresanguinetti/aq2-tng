@@ -417,13 +417,12 @@ void Add_Frag(edict_t * ent, int mod)
 		if (ent->client->resp.streakKills > ent->client->resp.streakKillsHighest)
 			ent->client->resp.streakKillsHighest = ent->client->resp.streakKills;
 
-		if (ent->client->resp.streakKills % 5 == 0 && use_rewards->value)
-		{
-			Announce_Reward(ent, IMPRESSIVE);
-		}
-		else if (ent->client->resp.streakKills % 12 == 0 && use_rewards->value)
-		{
-			Announce_Reward(ent, EXCELLENT);
+		if (use_rewards->value) {
+			if (ent->client->resp.streakKills % 5 == 0){
+				Announce_Reward(ent, IMPRESSIVE);
+			} else if (ent->client->resp.streakKills % 12 == 0){
+				Announce_Reward(ent, EXCELLENT);
+			}
 		}
 	}
 

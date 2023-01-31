@@ -3202,8 +3202,12 @@ void A_ScoreboardMessage (edict_t * ent, edict_t * killer)
 void TallyEndOfLevelTeamScores (void)
 {
 	int i;
-	gi.sound (&g_edicts[0], CHAN_VOICE | CHAN_NO_PHS_ADD,
-		gi.soundindex ("world/xian1.wav"), 1.0, ATTN_NONE, 0.0);
+	
+	// Old sound effect
+	//gi.sound(&g_edicts[0], CHAN_VOICE | CHAN_NO_PHS_ADD,gi.soundindex ("world/xian1.wav"), 1.0, ATTN_NONE, 0.0);
+
+	// Adjust 1 + 1 to N + 1 where N is the number of tng/round_end_N.wav files we want to randomize
+	gi.sound(&g_edicts[0], CHAN_VOICE | CHAN_NO_PHS_ADD, gi.soundindex(va("tng/round_end_%i.wav", rand() % 1 + 1)), 1, ATTN_NORM, 0 );
 
 	teams[TEAM1].total = teams[TEAM2].total = teams[TEAM3].total = 0;
 	for (i = 0; i < game.maxclients; i++)
