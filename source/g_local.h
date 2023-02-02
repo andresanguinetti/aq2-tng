@@ -1519,6 +1519,11 @@ void LogAward(char* steamid, char* discordid, int award);
 void LogEndMatchStats();
 #endif
 
+//python/ws.c
+#ifndef NO_PYTHON
+int runpython(void);
+#endif
+
 //============================================================================
 
 // client_t->anim_priority
