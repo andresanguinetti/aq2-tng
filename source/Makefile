@@ -141,7 +141,7 @@ ifdef NO_BOTS
 CFLAGS+=-DNO_BOTS
 endif
 
-ifndef NO_PYTHON
+ifdef NO_PYTHON
 CFLAGS+=-DNO_PYTHON
 endif
 
