@@ -165,6 +165,12 @@ GAME_OBJS += acesrc/acebot_ai.o acesrc/acebot_nodes.o acesrc/bot_combat.o \
 	acesrc/acebot_movement.o acesrc/bot_collision.o acesrc/botscan.o
 endif
 
+ifndef NO_PYTHON
+
+GAME_OBJS += python/ws.o
+
+endif
+
 game$(ARCH).$(SHLIBEXT): $(GAME_OBJS)
 	$(DO_LINK)
 
