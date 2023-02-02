@@ -9,19 +9,13 @@ int C2PyFunc(char *funcname, const char* msg, ...)
 	vsprintf(msg_cpy, msg, argptr);
 	va_end(argptr);
 
-    PyObject *pName, *pModule, *pDict, *pFunc, *pValue;
-
-    // if (argc < 3) 
-    // {
-    //     printf("Usage: exe_name python_source function_name\n");
-    //     return 1;
-    // }
+    PyObject *pName, *pModule, *pDict, *pFunc;
 
     // Initialize the Python Interpreter
     Py_Initialize();
 
     // Build the name object
-    pName = PyString_FromString(funcname);
+    pName = PyUnicode_FromString(funcname);
 
     // Load the module object
     pModule = PyImport_Import(pName);

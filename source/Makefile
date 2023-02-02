@@ -106,17 +106,14 @@ CFLAGS+=-target aarch64-apple-darwin
 endif
 endif
 
-
-ifndef NO_PYTHON
-CFLAGS += $(shell python3-config --includes)
-endif
-
 ifeq ($(USE_AQTION),TRUE)
 CFLAGS += -DUSE_AQTION -DAQTION_EXTENSION
 
 ifneq (,$(findstring WIN32,$(TNG_BUILD_FOR))$(findstring WIN64,$(TNG_BUILD_FOR)))
-CFLAGS += -I../q2pro-mgw-sdk/inc -DCURL_STATICLIB
+CFLAGS += -I../q2pro-mgw-sdk/inc -DCURL_STATICLIB -DNO_PYTHON
 SHLIBLIBS += -lcurl -lcrypt32 -lwsock32 -lz -lws2_32
+
+
 ifeq ($(TNG_BUILD_FOR),WIN32)
 CFLAGS += -L../q2pro-mgw-sdk/lib
 else ifeq ($(TNG_BUILD_FOR),WIN64)
@@ -129,6 +126,12 @@ CURL_CFLAGS ?= $(shell pkg-config libcurl --cflags)
 CURL_LIBS ?= $(shell pkg-config libcurl --libs)
 CFLAGS += -DUSE_CURL=1 $(CURL_CFLAGS) 
 SHLIBLIBS=-luuid -lcurl
+
+ifndef NO_PYTHON
+CFLAGS +=-DNO_PYTHON
+CFLAGS += $(shell python3-config --includes)
+endif
+
 endif
 endif
 
@@ -139,11 +142,6 @@ endif
 ifdef NO_BOTS
 CFLAGS+=-DNO_BOTS
 endif
-
-ifdef NO_PYTHON
-CFLAGS +=-DNO_PYTHON
-endif
-
 
 #############################################################################
 # SETUP AND BUILD
