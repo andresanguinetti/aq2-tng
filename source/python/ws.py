@@ -1,3 +1,11 @@
-def someFunction(text):
-    print('You passed this Python program '+text+' from C! Congratulations!')
-    return 12345
+#!/usr/bin/env python3
+# encoding: utf-8
+
+from distutils.core import setup, Extension
+
+hello_module = Extension('ws', sources = ['ws.c'])
+
+setup(name='hello',
+      version='0.1.0',
+      description='Hello world module written in C',
+      ext_modules=[hello_module])
