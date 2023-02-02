@@ -1469,6 +1469,7 @@ void Cmd_Say_f (edict_t * ent, qboolean team, qboolean arg0, qboolean partner_ms
 		gi.cprintf (NULL, PRINT_CHAT, "%s", text);
 		if ((!team) && (!partner_msg)) {
 			IRC_printf (IRC_T_TALK, "%s", text);
+			runpython();
 		}
 	}
 	
