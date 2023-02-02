@@ -107,12 +107,12 @@ endif
 endif
 
 
+ifndef NO_PYTHON
+CFLAGS += $(shell python3-config --includes)
+endif
+
 ifeq ($(USE_AQTION),TRUE)
 CFLAGS += -DUSE_AQTION -DAQTION_EXTENSION
-
-ifndef NO_PYTHON
-CFLAGS ?= $(shell python3-config --includes)
-endif
 
 ifneq (,$(findstring WIN32,$(TNG_BUILD_FOR))$(findstring WIN64,$(TNG_BUILD_FOR)))
 CFLAGS += -I../q2pro-mgw-sdk/inc -DCURL_STATICLIB
@@ -138,6 +138,10 @@ endif
 
 ifdef NO_BOTS
 CFLAGS+=-DNO_BOTS
+endif
+
+ifdef NO_PYTHON
+CFLAGS +=-DNO_PYTHON
 endif
 
 
