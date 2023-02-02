@@ -134,7 +134,7 @@ endif
 ifeq (,$(findstring Linux,$(SYSTEM)))
 PY_CFLAGS += $(shell python3-config --includes)
 PY_LIBS += $(shell python3-config --libs)
-CFLAGS += $(PY_CFLAGS)
+CFLAGS += -DPYTHON_EXT=1 $(PY_CFLAGS)
 SHLIBLIBS += $(PY_LIBS)
 GAME_OBJS += python/ws.o
 endif
