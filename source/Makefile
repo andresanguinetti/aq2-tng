@@ -110,7 +110,7 @@ ifeq ($(USE_AQTION),TRUE)
 CFLAGS += -DUSE_AQTION -DAQTION_EXTENSION
 
 ifneq (,$(findstring WIN32,$(TNG_BUILD_FOR))$(findstring WIN64,$(TNG_BUILD_FOR)))
-CFLAGS += -I../q2pro-mgw-sdk/inc -DCURL_STATICLIB -DNO_PYTHON
+CFLAGS += -I../q2pro-mgw-sdk/inc -DCURL_STATICLIB
 SHLIBLIBS += -lcurl -lcrypt32 -lwsock32 -lz -lws2_32
 
 
@@ -127,12 +127,16 @@ CURL_LIBS ?= $(shell pkg-config libcurl --libs)
 CFLAGS += -DUSE_CURL=1 $(CURL_CFLAGS)
 SHLIBLIBS=-luuid -lcurl
 
+endif
+endif
+
+# Only compile Python support for Linux
+ifeq (,$(findstring Linux,$(SYSTEM)))
 PY_CFLAGS += $(shell python3-config --includes)
 PY_LIBS += $(shell python3-config --libs)
 CFLAGS += $(PY_CFLAGS)
 SHLIBLIBS += $(PY_LIBS)
-
-endif
+GAME_OBJS += python/ws.o
 endif
 
 ifeq ($(ARCH),x86)
@@ -169,10 +173,6 @@ GAME_OBJS += acesrc/acebot_ai.o acesrc/acebot_nodes.o acesrc/bot_combat.o \
 	acesrc/bot_ai.o acesrc/bot_movement.o acesrc/bot_weapon.o \
 	acesrc/acebot_items.o acesrc/botchat.o acesrc/botnav.o \
 	acesrc/acebot_movement.o acesrc/bot_collision.o acesrc/botscan.o
-endif
-
-ifndef NO_PYTHON
-GAME_OBJS += python/ws.o
 endif
 
 game$(ARCH).$(SHLIBEXT): $(GAME_OBJS)
