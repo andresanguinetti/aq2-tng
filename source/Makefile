@@ -128,8 +128,9 @@ CFLAGS += -DUSE_CURL=1 $(CURL_CFLAGS)
 SHLIBLIBS=-luuid -lcurl
 
 PY_CFLAGS += $(shell python3-config --includes)
+PY_LIBS += $(shell python3-config --libs)
 CFLAGS += $(PY_CFLAGS)
-SHLIBLIBS=-lpython
+SHLIBLIBS += $(PY_LIBS)
 
 endif
 endif
