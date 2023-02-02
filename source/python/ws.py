@@ -1,11 +1,8 @@
-#!/usr/bin/env python3
-# encoding: utf-8
+def multiply():
+    c = 12345*6789
+    print(c)
+    return c
 
-from distutils.core import setup, Extension
-
-hello_module = Extension('ws', sources = ['ws.c'])
-
-setup(name='hello',
-      version='0.1.0',
-      description='Hello world module written in C',
-      ext_modules=[hello_module])
+def echochat(text):
+    print(text)
+    return text

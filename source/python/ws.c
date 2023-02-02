@@ -1,57 +1,51 @@
-#include <stdio.h>
 #include <Python.h>
 
-// Module method definitions
-static PyObject* hello_world(PyObject *self, PyObject *args) {
-    printf("Hello, world!\n");
-    Py_RETURN_NONE;
-}
+int C2PyFunc(char *funcname, const char* msg, ...)
+{
+    va_list	argptr;
+    char	msg_cpy[1024];
 
-static PyObject* hello(PyObject *self, PyObject *args) {
-    const char* name;
-    if (!PyArg_ParseTuple(args, "s", &name)) {
-        return NULL;
+    va_start(argptr, msg);
+	vsprintf(msg_cpy, msg, argptr);
+	va_end(argptr);
+
+    PyObject *pName, *pModule, *pDict, *pFunc, *pValue;
+
+    // if (argc < 3) 
+    // {
+    //     printf("Usage: exe_name python_source function_name\n");
+    //     return 1;
+    // }
+
+    // Initialize the Python Interpreter
+    Py_Initialize();
+
+    // Build the name object
+    pName = PyString_FromString(funcname);
+
+    // Load the module object
+    pModule = PyImport_Import(pName);
+
+    // pDict is a borrowed reference 
+    pDict = PyModule_GetDict(pModule);
+
+    // pFunc is also a borrowed reference 
+    pFunc = PyDict_GetItemString(pDict, msg_cpy);
+
+    if (PyCallable_Check(pFunc)) 
+    {
+        PyObject_CallObject(pFunc, NULL);
+    } else 
+    {
+        PyErr_Print();
     }
 
-    printf("Hello, %s!\n", name);
-    Py_RETURN_NONE;
-}
+    // Clean up
+    Py_DECREF(pModule);
+    Py_DECREF(pName);
 
-// Method definition object for this extension, these argumens mean:
-// ml_name: The name of the method
-// ml_meth: Function pointer to the method implementation
-// ml_flags: Flags indicating special features of this method, such as
-//          accepting arguments, accepting keyword arguments, being a
-//          class method, or being a static method of a class.
-// ml_doc:  Contents of this method's docstring
-static PyMethodDef hello_methods[] = { 
-    {   
-        "hello_world", hello_world, METH_NOARGS,
-        "Print 'hello world' from a method defined in a C extension."
-    },  
-    {   
-        "hello", hello, METH_VARARGS,
-        "Print 'hello xxx' from a method defined in a C extension."
-    },  
-    {NULL, NULL, 0, NULL}
-};
+    // Finish the Python Interpreter
+    Py_Finalize();
 
-// Module definition
-// The arguments of this structure tell Python what to call your extension,
-// what it's methods are and where to look for it's method definitions
-static struct PyModuleDef hello_definition = { 
-    PyModuleDef_HEAD_INIT,
-    "hello",
-    "A Python module that prints 'hello world' from C code.",
-    -1, 
-    hello_methods
-};
-
-// Module initialization
-// Python calls this function when importing your extension. It is important
-// that this function is named PyInit_[[your_module_name]] exactly, and matches
-// the name keyword argument in setup.py's setup() call.
-PyMODINIT_FUNC PyInit_hello(void) {
-    Py_Initialize();
-    return PyModule_Create(&hello_definition);
+    return 0;
 }
