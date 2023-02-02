@@ -129,6 +129,7 @@ SHLIBLIBS=-luuid -lcurl
 
 PY_CFLAGS += $(shell python3-config --includes)
 CFLAGS += $(PY_CFLAGS)
+SHLIBLIBS=-lpython
 
 endif
 endif
@@ -139,10 +140,6 @@ endif
 
 ifdef NO_BOTS
 CFLAGS+=-DNO_BOTS
-endif
-
-ifdef NO_PYTHON
-CFLAGS+=-DNO_PYTHON
 endif
 
 #############################################################################
