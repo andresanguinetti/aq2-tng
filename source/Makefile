@@ -124,13 +124,11 @@ else # Linux + Mac
 
 CURL_CFLAGS ?= $(shell pkg-config libcurl --cflags)
 CURL_LIBS ?= $(shell pkg-config libcurl --libs)
-CFLAGS += -DUSE_CURL=1 $(CURL_CFLAGS) 
+CFLAGS += -DUSE_CURL=1 $(CURL_CFLAGS)
 SHLIBLIBS=-luuid -lcurl
 
-ifndef NO_PYTHON
-CFLAGS +=-DNO_PYTHON
-CFLAGS += $(shell python3-config --includes)
-endif
+PY_CFLAGS += $(shell python3-config --includes)
+CFLAGS += $(PY_CFLAGS)
 
 endif
 endif
@@ -141,6 +139,10 @@ endif
 
 ifdef NO_BOTS
 CFLAGS+=-DNO_BOTS
+endif
+
+ifndef NO_PYTHON
+CFLAGS+=-DNO_PYTHON
 endif
 
 #############################################################################
