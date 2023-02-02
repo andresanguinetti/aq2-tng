@@ -110,6 +110,10 @@ endif
 ifeq ($(USE_AQTION),TRUE)
 CFLAGS += -DUSE_AQTION -DAQTION_EXTENSION
 
+ifndef NO_PYTHON
+CFLAGS ?= $(shell python3-config --includes)
+endif
+
 ifneq (,$(findstring WIN32,$(TNG_BUILD_FOR))$(findstring WIN64,$(TNG_BUILD_FOR)))
 CFLAGS += -I../q2pro-mgw-sdk/inc -DCURL_STATICLIB
 SHLIBLIBS += -lcurl -lcrypt32 -lwsock32 -lz -lws2_32
@@ -166,9 +170,7 @@ GAME_OBJS += acesrc/acebot_ai.o acesrc/acebot_nodes.o acesrc/bot_combat.o \
 endif
 
 ifndef NO_PYTHON
-
 GAME_OBJS += python/ws.o
-
 endif
 
 game$(ARCH).$(SHLIBEXT): $(GAME_OBJS)
