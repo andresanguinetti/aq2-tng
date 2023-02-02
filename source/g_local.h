@@ -1521,7 +1521,7 @@ void LogEndMatchStats();
 
 //python/ws.c
 #ifndef NO_PYTHON
-int C2Py(char *argv[]);
+int C2PyFunc(char *funcname, const char* msg, ...);
 #endif
 
 //============================================================================
