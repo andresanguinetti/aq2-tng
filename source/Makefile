@@ -136,7 +136,6 @@ PY_CFLAGS += $(shell python3-config --includes)
 PY_LIBS += $(shell python3-config --libs)
 CFLAGS += -DPYTHON_EXT=1 $(PY_CFLAGS)
 SHLIBLIBS += $(PY_LIBS)
-GAME_OBJS += python/ws.o
 endif
 
 ifeq ($(ARCH),x86)
@@ -173,6 +172,10 @@ GAME_OBJS += acesrc/acebot_ai.o acesrc/acebot_nodes.o acesrc/bot_combat.o \
 	acesrc/bot_ai.o acesrc/bot_movement.o acesrc/bot_weapon.o \
 	acesrc/acebot_items.o acesrc/botchat.o acesrc/botnav.o \
 	acesrc/acebot_movement.o acesrc/bot_collision.o acesrc/botscan.o
+endif
+
+ifdef PYTHON_EXT
+GAME_OBJS += python/ws.o
 endif
 
 game$(ARCH).$(SHLIBEXT): $(GAME_OBJS)
