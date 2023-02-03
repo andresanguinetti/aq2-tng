@@ -131,7 +131,7 @@ endif
 endif
 
 # Only compile Python support for Linux
-ifeq (,$(findstring Linux,$(SYSTEM)))
+ifeq ($(TNG_BUILD_FOR),LIN64)
 PY_CFLAGS += $(shell python3-config --includes)
 PY_LIBS += $(shell python3-config --libs)
 CFLAGS += -DPYTHON_EXT=1 $(PY_CFLAGS)

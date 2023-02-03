@@ -89,6 +89,7 @@ jobs:
         env:
           CC: "gcc"
           USE_AQTION: "TRUE"
+          TNG_BUILD_FOR: "LIN64"
 
       - name: Generate Linux x86 archive
         uses: actions/upload-artifact@v3
